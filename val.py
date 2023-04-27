@@ -20,12 +20,9 @@ def val(model, criterion, epoch, val_loader, evaluator, experiment, args):
         with torch.no_grad():
             target = model(image)
 
-        # criterion([N,C], [N])
-        loss = criterion(target, labels)
-        # loss.update(loss.item(), image.size(0))
-        loss_value = loss.item()
-
-        total_loss += loss_value
+        # criterion([N,C,H,W], [N,H,W])
+nn        loss_val = criterion(target, labels)
+        loss.update(loss_val.item(), image.size(0))
 
         pred = torch.argmax(target, dim=1)
         pred = pred.data.cpu().numpy()
@@ -43,6 +40,6 @@ def val(model, criterion, epoch, val_loader, evaluator, experiment, args):
     mIoU = evaluator.Mean_Intersection_over_Union()
     accuracy = evaluator.Pixel_Accuracy()
 
-    experiment.log_metric("val_epoch_loss", total_loss.item(), step=epoch)
+    experiment.log_metric("val_epoch_loss", loss.avg, step=epoch)
     experiment.log_metric("epoch_accuracy", accuracy, step=epoch)
     experiment.log_metric("epoch_mIoU", mIoU, step=epoch)

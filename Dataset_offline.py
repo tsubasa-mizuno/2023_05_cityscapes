@@ -119,7 +119,7 @@ class AlignedDataset(Dataset):
         transform_list = [
             transforms.Resize([h, w], Image.NEAREST),
             # transforms.RandomCrop((self.args.crop_size, self.args.crop_size * 2))
-            transforms.RandomCrop(self.args.crop_size),
+            transforms.RandomCrop((self.args.crop_size, self.args.crop_size * 2)),
         ]
 
         # transform.Compose：複数のTransformを連続して行うTransform
