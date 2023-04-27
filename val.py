@@ -14,14 +14,18 @@ def val(model, criterion, epoch, val_loader, evaluator, experiment, args):
 
         image = image.cuda()
         labels = labels.cuda()
-        labels = labels.squeeze(1)
+        # labels = labels.squeeze(1)
+        labels = labels.view(-1)
         labels = labels.long()
 
         with torch.no_grad():
             target = model(image)
+            target = target.reshape(-1, target.shape[1])
 
-        # criterion([N,C,H,W], [N,H,W])
-nn        loss_val = criterion(target, labels)
+        # criterion([B,C,H,W], [B,H,W])
+        loss_val = criterion(target, labels)
+        # targetはreshapeで，HWをCに押し付け　[B*H*W, C]
+        # labelsはreshapeで1画素に　[B*H*W, ]
         loss.update(loss_val.item(), image.size(0))
 
         pred = torch.argmax(target, dim=1)

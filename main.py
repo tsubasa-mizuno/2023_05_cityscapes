@@ -9,6 +9,10 @@ from util import Evaluator
 from train import train
 from val import val
 
+import os
+
+os.environ["CUDA_LAUNCH_BLOCKING"] = "1"
+
 
 def main():
     args = get_args()
