@@ -1,0 +1,6 @@
+ARCdataset_png/
+*.zip
+__pycache__/
+model
+*.png
+*.ipynb

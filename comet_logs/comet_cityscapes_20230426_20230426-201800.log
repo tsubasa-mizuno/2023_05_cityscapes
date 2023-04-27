@@ -1,0 +1,3 @@
+[45135-MainProcess:140419787446016] 14432 COMET INFO [experiment.py:4608]: Couldn't find a Git repository in '/mnt/HDD4TB-3/mizuno/2023_05_cityscapes' nor in any parent directory. You can override where Comet is looking for a Git Patch by setting the configuration `COMET_GIT_DIRECTORY`
+[45135-MainProcess:140420387014464] 14761 COMET INFO [_online.py:264]: Experiment is live on comet.com https://www.comet.com/tsubasa-mizuno/segnet-training-test/f1831abbd1a74c2fb0a91321866119cd
+

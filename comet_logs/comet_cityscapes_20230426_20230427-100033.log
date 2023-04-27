@@ -1,0 +1,21 @@
+[31436-MainProcess:140360065537792] 9405 COMET INFO [experiment.py:4608]: Couldn't find a Git repository in '/mnt/HDD4TB-3/mizuno/2023_05_cityscapes' nor in any parent directory. You can override where Comet is looking for a Git Patch by setting the configuration `COMET_GIT_DIRECTORY`
+[31436-MainProcess:140360146483008] 9727 COMET INFO [_online.py:264]: Experiment is live on comet.com https://www.comet.com/tsubasa-mizuno/segnet-training-test/88ac6e249e9442cc92882de91e635a63
+
+[31436-MainProcess:140360146483008] 50865 COMET INFO [summary.py:155]: ---------------------------------------------------------------------------------------
+[31436-MainProcess:140360146483008] 50868 COMET INFO [summary.py:156]: Comet.ml Experiment Summary
+[31436-MainProcess:140360146483008] 50869 COMET INFO [summary.py:157]: ---------------------------------------------------------------------------------------
+[31436-MainProcess:140360146483008] 50869 COMET INFO [summary.py:161]:   Data:
+[31436-MainProcess:140360146483008] 50869 COMET INFO [summary.py:170]:     display_summary_level : 1
+[31436-MainProcess:140360146483008] 50870 COMET INFO [summary.py:170]:     url                   : https://www.comet.com/tsubasa-mizuno/segnet-training-test/88ac6e249e9442cc92882de91e635a63
+[31436-MainProcess:140360146483008] 50871 COMET INFO [summary.py:161]:   Metrics [count] (min, max):
+[31436-MainProcess:140360146483008] 50871 COMET INFO [summary.py:170]:     epoch_loss : 0.1720979017068128
+[31436-MainProcess:140360146483008] 50872 COMET INFO [summary.py:170]:     loss [20]  : (0.04038109630346298, 3.4538767337799072)
+[31436-MainProcess:140360146483008] 50872 COMET INFO [summary.py:161]:   Uploads:
+[31436-MainProcess:140360146483008] 50873 COMET INFO [summary.py:170]:     environment details : 1
+[31436-MainProcess:140360146483008] 50873 COMET INFO [summary.py:170]:     filename            : 1
+[31436-MainProcess:140360146483008] 50873 COMET INFO [summary.py:170]:     installed packages  : 1
+[31436-MainProcess:140360146483008] 50874 COMET INFO [summary.py:170]:     os packages         : 1
+[31436-MainProcess:140360146483008] 50874 COMET INFO [summary.py:170]:     source_code         : 1 (1.35 KB)
+[31436-MainProcess:140360146483008] 50874 COMET INFO [summary.py:172]: 
+[31436-MainProcess:140360146483008] 51740 COMET INFO [utils.py:78]: Uploading metrics, params, and assets to Comet before program termination (may take several seconds)
+[31436-MainProcess:140360146483008] 51740 COMET INFO [utils.py:78]: The Python SDK has 3600 seconds to finish uploading collected data
