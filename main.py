@@ -43,7 +43,7 @@ def main():
             )
 
             if epoch % args.val_epochs == 0:
-                train(model, criterion, epoch, val_loader, evaluator, experiment, args)
+                val(model, criterion, epoch, val_loader, evaluator, experiment, args)
 
 
 if __name__ == "__main__":

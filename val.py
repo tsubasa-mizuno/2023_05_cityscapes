@@ -9,29 +9,29 @@ def val(model, criterion, epoch, val_loader, evaluator, experiment, args):
 
     val_loss = AverageMeter()
 
-    for sample in val_loader:
-        image, labels = sample["image"], sample["labels"]
+    with torch.no_grad():
+        for sample in val_loader:
+            image, labels = sample["image"].to(CUDA), sample["labels"].to(CUDA)
 
-        image = image.cuda()
-        labels = labels.cuda()
-        labels = labels.squeeze(dim=1)
-        # labels = labels.view(-1)
+            # image = image.cuda()
+            # labels = labels.cuda()
+            labels = labels.squeeze(dim=1)
+            # labels = labels.view(-1)
 
-        with torch.no_grad():
             target = model(image)
-        # target = target.reshape(-1, target.shape[1])
+            # target = target.reshape(-1, target.shape[1])
 
-        # criterion([B,C,H,W], [B,H,W])
+            # criterion([B,C,H,W], [B,H,W])
 
-        loss = criterion(target, labels.long())
-        # targetはreshapeで，HWをCに押し付け　[B*H*W, C]
-        # labelsはreshapeで1画素に　[B*H*W, ]
-        val_loss.update(loss, image.size(0))
+            loss = criterion(target, labels.long())
+            # targetはreshapeで，HWをCに押し付け　[B*H*W, C]
+            # labelsはreshapeで1画素に　[B*H*W, ]
+            val_loss.update(loss, image.size(0))
 
-        pred = torch.argmax(target, dim=1)
-        pred = pred.data.cpu().numpy()
-        labels1 = labels.cpu().numpy()
-        evaluator.add_batch(labels1, pred)
+            pred = torch.argmax(target, dim=1)
+            pred = pred.data.cpu().numpy()
+            labels1 = labels.cpu().numpy()
+            evaluator.add_batch(labels1, pred)
 
     if epoch % args.save_epochs == 0:
         make_sample(image, labels, model, experiment, epoch, dataset=args.dataset)
