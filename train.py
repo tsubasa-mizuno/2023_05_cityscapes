@@ -16,13 +16,12 @@ def train(model, criterion, optimizer, loader, iters, epoch, experiment, evaluat
             image = image.cuda()
             labels = labels.cuda()
             labels = labels.squeeze(dim=1)
-            target = model(image)
-            loss = criterion(target, labels.long())
+            y = model(image)
+            loss = criterion(y, labels.long())
             train_loss.update(loss, image.size(0))
             optimizer.zero_grad()
             loss.backward()
             optimizer.step()
-        # trainループでテンソルがどうなっているかを確認して，それをvalに適用してみる．
 
     experiment.log_metric("epoch_loss", train_loss.avg, step=epoch)
     return iters, train_loss

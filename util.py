@@ -3,11 +3,11 @@ import torch
 import os
 import os.path as osp
 
+
 class Evaluator(object):
     def __init__(self, num_class):
-
         self.num_class = num_class
-        self.confusion_matrix = np.zeros((self.num_class,)*2)
+        self.confusion_matrix = np.zeros((self.num_class,) * 2)
 
     def Pixel_Accuracy(self):
         Acc = np.diag(self.confusion_matrix).sum() / self.confusion_matrix.sum()
@@ -15,14 +15,16 @@ class Evaluator(object):
 
     def Mean_Intersection_over_Union(self):
         MIoU = np.diag(self.confusion_matrix) / (
-                    np.sum(self.confusion_matrix, axis=1) + np.sum(self.confusion_matrix, axis=0) -
-                    np.diag(self.confusion_matrix))
+            np.sum(self.confusion_matrix, axis=1)
+            + np.sum(self.confusion_matrix, axis=0)
+            - np.diag(self.confusion_matrix)
+        )
         MIoU = np.nanmean(MIoU)
         return MIoU
 
     def _generate_matrix(self, gt_image, pre_image):
         mask = (gt_image >= 0) & (gt_image < self.num_class)
-        label = self.num_class * gt_image[mask].astype('int') + pre_image[mask]
+        label = self.num_class * gt_image[mask].astype("int") + pre_image[mask]
         count = np.bincount(label, minlength=self.num_class**2)
         confusion_matrix = count.reshape(self.num_class, self.num_class)
         return confusion_matrix
@@ -36,7 +38,6 @@ class Evaluator(object):
 
 
 class AverageMeter(object):
-
     def __init__(self):
         self.reset()
 
@@ -49,6 +50,7 @@ class AverageMeter(object):
     def update(self, val, n=1):
         if isinstance(val, torch.Tensor):
             val = val.item()
+            # エラー発生ポイント
         self.val = val
         self.sum += val * n
         self.count += n

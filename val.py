@@ -11,10 +11,10 @@ def val(model, criterion, epoch, val_loader, evaluator, experiment, args):
 
     with torch.no_grad():
         for sample in val_loader:
-            image, labels = sample["image"].to(CUDA), sample["labels"].to(CUDA)
+            image, labels = sample["image"], sample["labels"]
 
-            # image = image.cuda()
-            # labels = labels.cuda()
+            image = image.cuda()
+            labels = labels.cuda()
             labels = labels.squeeze(dim=1)
             # labels = labels.view(-1)
 
