@@ -43,8 +43,8 @@ def get_args():
         "-i",
         "--input_channels",
         type=int,
-        default=64,
-        help="number of input_channels. default to 64",
+        default=3,
+        help="number of input_channels. default to 3",
     )
     parser.add_argument(
         "-o",

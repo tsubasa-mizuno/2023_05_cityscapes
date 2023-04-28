@@ -2,6 +2,9 @@ import torch
 from make_sample import make_sample
 from util import save_checkpoint
 from util import AverageMeter
+import os
+
+os.environ["CUDA_LAUNCH_BLOCKING"] = "1"
 
 
 def val(model, criterion, epoch, val_loader, evaluator, experiment, args):
@@ -17,15 +20,10 @@ def val(model, criterion, epoch, val_loader, evaluator, experiment, args):
             labels = labels.cuda()
             labels = labels.squeeze(dim=1)
             # labels = labels.view(-1)
-
             target = model(image)
-            # target = target.reshape(-1, target.shape[1])
-
-            # criterion([B,C,H,W], [B,H,W])
 
             loss = criterion(target, labels.long())
-            # targetはreshapeで，HWをCに押し付け　[B*H*W, C]
-            # labelsはreshapeで1画素に　[B*H*W, ]
+            # ↑targetの形
             val_loss.update(loss, image.size(0))
 
             pred = torch.argmax(target, dim=1)

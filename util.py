@@ -26,6 +26,7 @@ class Evaluator(object):
         mask = (gt_image >= 0) & (gt_image < self.num_class)
         label = self.num_class * gt_image[mask].astype("int") + pre_image[mask]
         count = np.bincount(label, minlength=self.num_class**2)
+        # ↑これがおかしい
         confusion_matrix = count.reshape(self.num_class, self.num_class)
         return confusion_matrix
 
@@ -47,12 +48,11 @@ class AverageMeter(object):
         self.sum = 0
         self.count = 0
 
-    def update(self, val, n=1):
-        if isinstance(val, torch.Tensor):
-            val = val.item()
-            # エラー発生ポイント
-        self.val = val
-        self.sum += val * n
+    def update(self, labels, n=1):
+        if type(labels).__module__ == "tensor":
+            labels = labels.item()
+        self.labels = labels
+        # self.sum += labels
         self.count += n
         self.avg = self.sum / self.count
 
