@@ -19,10 +19,10 @@ def train(model, criterion, optimizer, loader, iters, epoch, experiment, evaluat
             labels = labels.squeeze(dim=1)
             target = model(image)
             loss = criterion(target, labels.long())
-            train_loss.update(loss, image.size(0))
             optimizer.zero_grad()
             loss.backward()
             optimizer.step()
+            train_loss.update(loss, image.size(0))
 
     experiment.log_metric("epoch_loss", train_loss.avg, step=epoch)
     return iters, train_loss
