@@ -15,15 +15,11 @@ def val(model, criterion, epoch, val_loader, evaluator, experiment, args):
     with torch.no_grad():
         for sample in val_loader:
             image, labels = sample["image"], sample["labels"]
-
             image = image.cuda()
             labels = labels.cuda()
             labels = labels.squeeze(dim=1)
-            # labels = labels.view(-1)
             target = model(image)
-
             loss = criterion(target, labels.long())
-            # ↑targetの形
             val_loss.update(loss, image.size(0))
 
             pred = torch.argmax(target, dim=1)

@@ -11,26 +11,24 @@ def get_args():
         "--dataset",
         type=str,
         default="Cityscapes",
-        choices=["Cityscapes", "UCF", "HMDB", "Kinetics"],
     )
     parser.add_argument(
         "-m",
         "--model",
         type=str,
-        choices=["SegNet", "Unet"],
         default="Unet",
-        help="CNN model. default to SegNet",
+        help="CNN model. default to Unet",
     )
     parser.add_argument("--pretrain", action="store_true", help="use pretrained model")
     parser.add_argument(
         "-b",
         "--batch_size",
         type=int,
-        default=8,  # --train_num_batchsと同じ？
-        help="batch size. default to 15",
+        default=4,  # --train_num_batchsと同じ？
+        help="batch size. default to 4",
     )
     parser.add_argument(
-        "-n", "--num_class", type=int, default=19, help="number of class. default to 19"
+        "-n", "--num_class", type=int, default=3, help="number of class. default to 3"
     )
     parser.add_argument(
         "-e",

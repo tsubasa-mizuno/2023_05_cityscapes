@@ -101,6 +101,19 @@ class AlignedDataset(Dataset):
         pil_labels = Image.open(labels_file_path)
         # pil->np
         labels_numpy = numpy.array(pil_labels)
+
+        # ラベルに含まれる値を確認
+        unique_labels = numpy.unique(labels_numpy)
+        n_classes = 19
+
+        # ラベルの値がクラス数より大きい場合にはクラス数以下に修正する
+        for ul in unique_labels:
+            if ul >= n_classes:
+                labels_numpy[labels_numpy == ul] = n_classes - 1
+
+        # モデルの出力のクラス数をラベルのクラス数に一致させる必要がある場合には、
+        # モデルの出力に含まれる値も同様に修正する
+
         # np->tensor
         labels_tensor = torch.from_numpy(labels_numpy).unsqueeze(0)
 

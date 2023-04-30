@@ -1,5 +1,6 @@
 from util import AverageMeter
 from tqdm import tqdm
+import numpy as np
 
 
 def train(model, criterion, optimizer, loader, iters, epoch, experiment, evaluator):
@@ -16,8 +17,8 @@ def train(model, criterion, optimizer, loader, iters, epoch, experiment, evaluat
             image = image.cuda()
             labels = labels.cuda()
             labels = labels.squeeze(dim=1)
-            y = model(image)
-            loss = criterion(y, labels.long())
+            target = model(image)
+            loss = criterion(target, labels.long())
             train_loss.update(loss, image.size(0))
             optimizer.zero_grad()
             loss.backward()
