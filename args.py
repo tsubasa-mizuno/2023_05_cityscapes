@@ -24,8 +24,8 @@ def get_args():
         "-b",
         "--batch_size",
         type=int,
-        default=4,  # --train_num_batchsと同じ？
-        help="batch size. default to 4",
+        default=8,  # --train_num_batchsと同じ？
+        help="batch size. default to 8",
     )
     parser.add_argument(
         "-n", "--num_class", type=int, default=3, help="number of class. default to 3"

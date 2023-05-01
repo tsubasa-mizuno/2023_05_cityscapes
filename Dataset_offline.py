@@ -101,19 +101,6 @@ class AlignedDataset(Dataset):
         pil_labels = Image.open(labels_file_path)
         # pil->np
         labels_numpy = numpy.array(pil_labels)
-
-        # ラベルに含まれる値を確認
-        unique_labels = numpy.unique(labels_numpy)
-        n_classes = 19
-
-        # ラベルの値がクラス数より大きい場合にはクラス数以下に修正する
-        for ul in unique_labels:
-            if ul >= n_classes:
-                labels_numpy[labels_numpy == ul] = n_classes - 1
-
-        # モデルの出力のクラス数をラベルのクラス数に一致させる必要がある場合には、
-        # モデルの出力に含まれる値も同様に修正する
-
         # np->tensor
         labels_tensor = torch.from_numpy(labels_numpy).unsqueeze(0)
 
@@ -131,6 +118,7 @@ class AlignedDataset(Dataset):
         h, w = self.short_side(image_tensor.size()[1], image_tensor.size()[2], 256)
         transform_list = [
             transforms.Resize([h, w], Image.NEAREST),
+            # transforms.RandomCrop((self.args.crop_size, self.args.crop_size * 2))
             transforms.RandomCrop((self.args.crop_size, self.args.crop_size * 2)),
         ]
 
@@ -177,14 +165,14 @@ def dataset_facory(args):
         train_dataset,
         batch_size=args.batch_size,
         num_workers=args.workers,  # argsで指定
-        shuffle=True,
+        shuffle=True,  # ランダムあり
         pin_memory=True,
     )
     val_loader = DataLoader(
         val_dataset,
         batch_size=args.batch_size,
         num_workers=args.workers,  # argsで指定
-        shuffle=False,
+        shuffle=False,  # ランダムなし
         pin_memory=True,
     )
 

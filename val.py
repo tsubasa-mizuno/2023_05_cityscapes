@@ -3,6 +3,7 @@ from make_sample import make_sample
 from util import save_checkpoint
 from util import AverageMeter
 from tqdm import tqdm
+import numpy
 
 
 # def val(model, criterion, epoch, val_val_loader, evaluator, experiment, args):
@@ -78,8 +79,16 @@ def val(model, criterion, epoch, val_loader, evaluator, experiment, args):
         image, labels = sample["image"], sample["labels"]
 
         image = image.cuda()
-        labels = labels.cuda()
+
+        labels = labels.numpy().astype(numpy.float32)
+        max_label_value = numpy.max(labels)
+        if max_label_value >= 19:
+            labels[labels >= 19] = 18
+        labels = torch.from_numpy(labels)
+
         labels = labels.squeeze(dim=1)
+        labels = labels.cuda()
+
         with torch.no_grad():
             target = model(image)
 
@@ -103,5 +112,5 @@ def val(model, criterion, epoch, val_loader, evaluator, experiment, args):
     accuracy = evaluator.Pixel_Accuracy()
 
     experiment.log_metric("val_epoch_loss", val_loss.avg, step=epoch)
-    experiment.log_metric("epoch_accuracy", accuracy, step=epoch)
-    experiment.log_metric("epoch_mIoU", mIoU, step=epoch)
+    experiment.log_metric("val_epoch_accuracy", accuracy, step=epoch)
+    experiment.log_metric("val_epoch_mIoU", mIoU, step=epoch)
