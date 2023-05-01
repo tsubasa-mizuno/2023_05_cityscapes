@@ -131,7 +131,6 @@ class AlignedDataset(Dataset):
         h, w = self.short_side(image_tensor.size()[1], image_tensor.size()[2], 256)
         transform_list = [
             transforms.Resize([h, w], Image.NEAREST),
-            # transforms.RandomCrop((self.args.crop_size, self.args.crop_size * 2))
             transforms.RandomCrop((self.args.crop_size, self.args.crop_size * 2)),
         ]
 

@@ -61,7 +61,7 @@ def get_args():
         help="validation interval in epochs. default to 5",
     )
     parser.add_argument(
-        "--save_epochs", type=int, default=20, help="model save epochs. default to 10"
+        "--save_epochs", type=int, default=10, help="model save epochs. default to 10"
     )
 
     parser.add_argument("-l", "--labels", type=str, required=True, help="ground truth")

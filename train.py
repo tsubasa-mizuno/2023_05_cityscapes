@@ -1,6 +1,5 @@
 from util import AverageMeter
 from tqdm import tqdm
-import numpy as np
 
 
 def train(model, criterion, optimizer, loader, iters, epoch, experiment, evaluator):
@@ -24,5 +23,6 @@ def train(model, criterion, optimizer, loader, iters, epoch, experiment, evaluat
             optimizer.step()
             train_loss.update(loss, image.size(0))
 
-    experiment.log_metric("epoch_loss", train_loss.avg, step=epoch)
+    epoch_loss = train_loss.avg
+    experiment.log_metric("epoch_loss", epoch_loss, step=epoch)
     return iters, train_loss
