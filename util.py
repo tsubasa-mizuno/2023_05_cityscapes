@@ -53,11 +53,11 @@ class AverageMeter(object):
         self.sum = 0
         self.count = 0
 
-    def update(self, labels, n=1):
-        if type(labels).__module__ == "tensor":
-            labels = labels.item()
-        # self.labels = labels
-        self.sum += labels
+    def update(self, val, n=1):
+        if isinstance(val, torch.Tensor):
+            val = val.item()
+        self.val = val
+        self.sum += val * n
         self.count += n
         self.avg = self.sum / self.count
 

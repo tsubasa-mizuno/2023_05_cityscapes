@@ -10,9 +10,6 @@ def train(model, criterion, optimizer, loader, iters, epoch, experiment, evaluat
     model.train()
 
     train_loss = AverageMeter()
-    optimizer = torch.optim.SGD(
-        model.parameters(), lr=0.1, momentum=0.9, weight_decay=0.0005
-    )
 
     with tqdm(loader, leave=False) as pbar_train:
         pbar_train.set_description("[train]")
@@ -27,6 +24,7 @@ def train(model, criterion, optimizer, loader, iters, epoch, experiment, evaluat
             loss.backward()
             optimizer.step()
             train_loss.update(loss, image.size(0))
+            break
 
     experiment.log_metric("train_epoch_loss", train_loss.avg, step=epoch)
     return iters, train_loss

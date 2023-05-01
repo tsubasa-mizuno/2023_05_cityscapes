@@ -97,15 +97,21 @@ def get_args():
 
     # dataset_path
     parser.add_argument(
-        "--gtFine_folder",
+        "--gtFine_dir",
         default="/mnt/HDD4TB-3/mizuno/cityscapes/gtFine_trainvaltest/gtFine",
         type=str,
     )
     parser.add_argument(
-        "--image_folder",
+        "--image_dir",
         default="/mnt/HDD4TB-3/mizuno/cityscapes/leftImg8bit_trainvaltest/leftImg8bit",
         type=str,
     )
+    parser.add_argument(
+        "--save_dir",
+        default="/mnt/HDD4TB-3/mizuno/202305_Cityscapes/saveimg",
+        type=str,
+    )
+
     parser.add_argument(
         "--dir_data_name",
         type=str,
@@ -114,6 +120,67 @@ def get_args():
     )
 
     parser.add_argument("--workers", type=int, default="5", help="num_workers")
+
+    parser.add_argument(
+        "--palette",
+        default=[
+            128,
+            64,
+            128,
+            244,
+            35,
+            232,
+            70,
+            70,
+            70,
+            102,
+            102,
+            156,
+            190,
+            153,
+            153,
+            153,
+            153,
+            153,
+            250,
+            170,
+            30,
+            220,
+            220,
+            0,
+            107,
+            142,
+            35,
+            152,
+            251,
+            152,
+            70,
+            130,
+            180,
+            220,
+            20,
+            60,
+            255,
+            0,
+            0,
+            142,
+            0,
+            0,
+            70,
+            0,
+            60,
+            100,
+            0,
+            80,
+            100,
+            0,
+            0,
+            230,
+            119,
+            11,
+            32,
+        ],
+    )
 
     # parser.add_argument(
     #     '--model_dir',
