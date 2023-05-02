@@ -72,7 +72,6 @@ class AlignedDataset(Dataset):
 
     def make_dataset(self, index, labels_list, image_list) -> dict:
         # ランダムなindexの画像を取得
-        print(index)
         labels_file_path = labels_list[index]
         # instance_file_path = instance_list[index]
         image_file_path = image_list[index]

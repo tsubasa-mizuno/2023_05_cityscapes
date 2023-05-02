@@ -34,8 +34,8 @@ def get_args():
         "-e",
         "--num_epochs",
         type=int,
-        default=30,
-        help="number of epochs. default to 30",
+        default=40,
+        help="number of epochs. default to 40",
     )
     parser.add_argument(
         "-i",
@@ -48,12 +48,15 @@ def get_args():
         "-o",
         "--output_channels",
         type=int,
-        default=30,
-        help="number of output_channels. default to 30",
+        default=40,
+        help="number of output_channels. default to 40",
     )
+
+    # 学習率
     parser.add_argument(
-        "-s", "--scale", type=float, default=0.5, help="number of scale. default to 0.5"
+        "-s", "--scale", type=float, default=0.1, help="number of scale. default to 0.5"
     )
+
     parser.add_argument(
         "--val_epochs",
         type=int,
@@ -119,7 +122,7 @@ def get_args():
         help="model directory",
     )
 
-    parser.add_argument("--workers", type=int, default="5", help="num_workers")
+    parser.add_argument("--workers", type=int, default="8", help="num_workers")
 
     parser.add_argument(
         "--palette",

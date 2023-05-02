@@ -6,11 +6,12 @@ import numpy
 from imagesave import imagesave
 
 
-def val(model, criterion, epoch, val_loader, evaluator, experiment, args):
+def val(model, criterion, epoch, val_loader, evaluator, experiment, args, global_step):
     model.eval()
 
     val_loss = AverageMeter()
     i = 0
+    c = 0
 
     for sample in val_loader:
         image, labels = sample["image"], sample["labels"]
@@ -18,19 +19,17 @@ def val(model, criterion, epoch, val_loader, evaluator, experiment, args):
         image = image.cuda()
 
         # labelの値の修正
-        labels = labels.numpy().astype(numpy.float32)
-        max_label_value = numpy.max(labels)
-        if max_label_value >= 30:
+        labels = labels.float().cuda()
+        if torch.max(labels) >= 30:
             labels[labels >= 30] = 29
-        labels = torch.from_numpy(labels)
+            c += 1
 
         labels = labels.squeeze(dim=1)
-        labels = labels.cuda()
 
         with torch.no_grad():
             target = model(image)
 
-        imagesave(target, labels, args, i)
+        imagesave(image, target, labels, args, i)
         i += 1
 
         loss = criterion(target, labels.long())
@@ -52,6 +51,8 @@ def val(model, criterion, epoch, val_loader, evaluator, experiment, args):
     mIoU = evaluator.Mean_Intersection_over_Union()
     accuracy = evaluator.Pixel_Accuracy()
 
-    experiment.log_metric("val_epoch_loss", val_loss.avg, step=epoch)
-    experiment.log_metric("val_epoch_accuracy", accuracy, step=epoch)
-    experiment.log_metric("val_epoch_mIoU", mIoU, step=epoch)
+    experiment.log_metric("val_epoch_loss", val_loss.avg, epoch=epoch, step=global_step)
+    experiment.log_metric("val_epoch_accuracy", accuracy, epoch=epoch, step=global_step)
+    experiment.log_metric("val_epoch_mIoU", mIoU, epoch=epoch, step=global_step)
+
+    return global_step
