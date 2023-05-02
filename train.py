@@ -24,7 +24,6 @@ def train(model, criterion, optimizer, loader, iters, epoch, experiment, evaluat
             loss.backward()
             optimizer.step()
             train_loss.update(loss, image.size(0))
-            break
 
     experiment.log_metric("train_epoch_loss", train_loss.avg, step=epoch)
     return iters, train_loss

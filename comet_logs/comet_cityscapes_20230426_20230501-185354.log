@@ -1,0 +1,23 @@
+[719399-MainProcess:139916063414080] 13278 COMET INFO [_online.py:264]: Experiment is live on comet.com https://www.comet.com/tsubasa-mizuno/segnet-training-test/1ed69d5a1066415bbc45622faa846239
+
+[719399-MainProcess:139916063414080] 25643 COMET INFO [summary.py:155]: ---------------------------------------------------------------------------------------
+[719399-MainProcess:139916063414080] 25645 COMET INFO [summary.py:156]: Comet.ml Experiment Summary
+[719399-MainProcess:139916063414080] 25646 COMET INFO [summary.py:157]: ---------------------------------------------------------------------------------------
+[719399-MainProcess:139916063414080] 25646 COMET INFO [summary.py:161]:   Data:
+[719399-MainProcess:139916063414080] 25652 COMET INFO [summary.py:170]:     display_summary_level : 1
+[719399-MainProcess:139916063414080] 25652 COMET INFO [summary.py:170]:     url                   : https://www.comet.com/tsubasa-mizuno/segnet-training-test/1ed69d5a1066415bbc45622faa846239
+[719399-MainProcess:139916063414080] 25652 COMET INFO [summary.py:161]:   Metrics:
+[719399-MainProcess:139916063414080] 25653 COMET INFO [summary.py:170]:     loss             : 3.4303364753723145
+[719399-MainProcess:139916063414080] 25653 COMET INFO [summary.py:170]:     train_epoch_loss : 3.4303364753723145
+[719399-MainProcess:139916063414080] 25655 COMET INFO [summary.py:161]:   Uploads:
+[719399-MainProcess:139916063414080] 25656 COMET INFO [summary.py:170]:     environment details      : 1
+[719399-MainProcess:139916063414080] 25656 COMET INFO [summary.py:170]:     filename                 : 1
+[719399-MainProcess:139916063414080] 25656 COMET INFO [summary.py:170]:     git metadata             : 1
+[719399-MainProcess:139916063414080] 25656 COMET INFO [summary.py:170]:     git-patch (uncompressed) : 1 (4.28 KB)
+[719399-MainProcess:139916063414080] 25657 COMET INFO [summary.py:170]:     installed packages       : 1
+[719399-MainProcess:139916063414080] 25657 COMET INFO [summary.py:170]:     os packages              : 1
+[719399-MainProcess:139916063414080] 25658 COMET INFO [summary.py:170]:     source_code              : 1 (1.33 KB)
+[719399-MainProcess:139916063414080] 25658 COMET INFO [summary.py:172]: 
+[719399-MainProcess:139916063414080] 27274 COMET INFO [utils.py:78]: Uploading metrics, params, and assets to Comet before program termination (may take several seconds)
+[719399-MainProcess:139916063414080] 27275 COMET INFO [utils.py:78]: The Python SDK has 3600 seconds to finish uploading collected data
+[719399-MainProcess:139916063414080] 27275 COMET INFO [comet.py:996]: Uploading 1 metrics, params and output messages
