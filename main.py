@@ -40,6 +40,7 @@ def main():
                 epoch,
                 experiment,
                 evaluator,
+                args,
             )
 
             if epoch % args.val_epochs == 0:

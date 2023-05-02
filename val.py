@@ -17,10 +17,11 @@ def val(model, criterion, epoch, val_loader, evaluator, experiment, args):
 
         image = image.cuda()
 
+        # labelの値の修正
         labels = labels.numpy().astype(numpy.float32)
         max_label_value = numpy.max(labels)
-        if max_label_value >= 19:
-            labels[labels >= 19] = 18
+        if max_label_value >= 30:
+            labels[labels >= 30] = 29
         labels = torch.from_numpy(labels)
 
         labels = labels.squeeze(dim=1)
