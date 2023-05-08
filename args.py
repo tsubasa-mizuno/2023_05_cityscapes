@@ -28,7 +28,7 @@ def get_args():
         help="batch size. default to 8",
     )
     parser.add_argument(
-        "-n", "--num_class", type=int, default=33, help="number of class. default to 33"
+        "-n", "--num_class", type=int, default=50, help="number of class. default to 50"
     )
     parser.add_argument(
         "-e",
