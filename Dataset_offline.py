@@ -95,13 +95,13 @@ class AlignedDataset(Dataset):
         image_tensor = torch.from_numpy(image_numpy).permute(2, 0, 1)
         # shape：[3, 1024, 2048]
 
-        if self.purpose == "val":
-            pil_image.save(
-                os.path.join(
-                    self.args.save_dir,
-                    f"{index}_IMAGE_IMAGE.PNG",
-                )
-            )
+        # if self.purpose == "val":
+        #     pil_image.save(
+        #         os.path.join(
+        #             self.args.save_dir,
+        #             f"{index}_IMAGE_IMAGE.PNG",
+        #         )
+        #     )
 
         # shape:H*W欲しい
         # ----ラベル画像----
