@@ -15,13 +15,8 @@ def imagesave(target, labels, image, args, i):
     target_img.putpalette(palette)
     target_img.save(os.path.join(args.save_dir, f"{i}_TARGET_IMAGE.PNG"))
 
-    # image = numpy.argmax(image.cpu().detach().numpy(), axis=0)
-    # image = Image.fromarray(image)
-    # image = Image.fromarray(image.detach().cpu().numpy())
-    # image.save(os.path.join(args.save_dir, f"{i}_IMAGE_IMAGE.PNG"))
-
-    # labels_img = Image.fromarray(labels[0].cpu().detach().numpy().astype(numpy.uint8))
-    # labels_img.putpalette(palette)
-    # labels_img.save(os.path.join(args.save_dir, f"{i}_LABELS_IMAGE.PNG"))
+    labels_img = Image.fromarray(labels[0].cpu().detach().numpy().astype(numpy.uint8))
+    labels_img.putpalette(palette)
+    labels_img.save(os.path.join(args.save_dir, f"{i}_LABELS_IMAGE.PNG"))
 
     # ペア画像がわかるように

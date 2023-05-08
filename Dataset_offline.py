@@ -17,6 +17,7 @@ class AlignedDataset(Dataset):
     def __init__(self, args, purpose) -> None:
         # データセットクラスの初期化
         self.args = args
+        self.purpose = purpose
 
         # labelsファイルのパスのリスト
         self.labels_list = []
@@ -93,6 +94,14 @@ class AlignedDataset(Dataset):
         # np->tensor
         image_tensor = torch.from_numpy(image_numpy).permute(2, 0, 1)
         # shape：[3, 1024, 2048]
+
+        if self.purpose == "val":
+            pil_image.save(
+                os.path.join(
+                    self.args.save_dir,
+                    f"{index}_IMAGE_IMAGE.PNG",
+                )
+            )
 
         # shape:H*W欲しい
         # ----ラベル画像----

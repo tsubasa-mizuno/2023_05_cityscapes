@@ -28,7 +28,7 @@ def get_args():
         help="batch size. default to 8",
     )
     parser.add_argument(
-        "-n", "--num_class", type=int, default=3, help="number of class. default to 3"
+        "-n", "--num_class", type=int, default=33, help="number of class. default to 33"
     )
     parser.add_argument(
         "-e",
@@ -48,8 +48,8 @@ def get_args():
         "-o",
         "--output_channels",
         type=int,
-        default=40,
-        help="number of output_channels. default to 40",
+        default=30,
+        help="number of output_channels. default to 30",
     )
 
     # 学習率

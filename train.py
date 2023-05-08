@@ -1,6 +1,7 @@
 from util import AverageMeter
 from tqdm import tqdm
 from imagesave import imagesave
+import torch
 
 
 def train(
@@ -20,6 +21,8 @@ def train(
 
     train_loss = AverageMeter()
 
+    i = 0
+
     with tqdm(loader, leave=False) as pbar_train:
         pbar_train.set_description("[train]")
         for sample in pbar_train:
@@ -33,7 +36,6 @@ def train(
             loss.backward()
             optimizer.step()
             train_loss.update(loss, image.size(0))
-            break
 
     experiment.log_metric(
         "train_epoch_loss", train_loss.avg, epoch=epoch, step=global_step

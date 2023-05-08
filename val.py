@@ -11,25 +11,23 @@ def val(model, criterion, epoch, val_loader, evaluator, experiment, args, global
 
     val_loss = AverageMeter()
     i = 0
-    c = 0
 
     for sample in val_loader:
         image, labels = sample["image"], sample["labels"]
 
         image = image.cuda()
-
         # labelの値の修正
-        labels = labels.float().cuda()
-        if torch.max(labels) >= 30:
-            labels[labels >= 30] = 29
-            c += 1
+        labels = labels.cuda()
+        # if torch.max(labels) >= 30:
+        #     labels[labels >= 30] = 29
+        #     print(str(i))
 
         labels = labels.squeeze(dim=1)
 
         with torch.no_grad():
             target = model(image)
 
-        imagesave(image, target, labels, args, i)
+        imagesave(target, labels, image, args, i)
         i += 1
 
         loss = criterion(target, labels.long())
