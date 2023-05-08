@@ -24,6 +24,10 @@ def train(
         pbar_train.set_description("[train]")
         for sample in pbar_train:
             image, labels = sample["image"], sample["labels"]
+
+            # labelsのuniqueな値を取り出す
+            unique_values = torch.unique(labels)
+
             image = image.cuda()
             labels = labels.cuda()
             labels = labels.squeeze(dim=1)
