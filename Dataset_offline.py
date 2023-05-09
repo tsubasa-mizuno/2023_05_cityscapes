@@ -19,6 +19,8 @@ class AlignedDataset(Dataset):
         self.args = args
         self.purpose = purpose
         self.crop_size = args.crop_size
+        self.label_dict = args.label_dict
+        self.palette = args.palette
 
         # labelsファイルのパスのリスト
         self.labels_list = []
@@ -48,11 +50,11 @@ class AlignedDataset(Dataset):
         # purpose == testの時，testのパスを指定
         else:
             self.labels_list = glob.glob(
-                os.path.join(args.gtFine_dir, "test/*/*_gtFine_labelIds.png")
+                os.path.join(args.gtFine_dir, "train/*/*_gtFine_labelIds.png")
             )
             # self.instance_list = glob.glob(os.path.join(args.gtFine_dir, 'test/*/*_gtFine_instanceIds.png'))
             self.image_list = glob.glob(
-                os.path.join(args.image_dir, "test/*/*_leftImg8bit.png")
+                os.path.join(args.image_dir, "train/*/*_leftImg8bit.png")
             )
 
         # ソートする
@@ -100,8 +102,14 @@ class AlignedDataset(Dataset):
         # ----ラベル画像----
         # img->pil
         pil_labels = Image.open(labels_file_path)
+        # print(labels_file_path)
+
         # pil->np
         labels_numpy = numpy.array(pil_labels)
+
+        # labelIDをtrainlabelIDに変換
+        labels_numpy = numpy.vectorize(self.label_dict.get)(labels_numpy)
+
         # np->tensor
         labels_tensor = torch.from_numpy(labels_numpy).unsqueeze(0)
 

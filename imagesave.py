@@ -5,7 +5,7 @@ import torchvision.transforms as transforms
 import numpy
 
 
-def imagesave(target, labels, image, args, i):
+def imagesave(target, labels, args, i):
     os.makedirs(args.save_dir, exist_ok=True)
     palette = args.palette
 

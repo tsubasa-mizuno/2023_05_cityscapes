@@ -23,25 +23,19 @@ def train(
 
     train_loss = AverageMeter()
 
-    label_dict = args.label_dict
-    i = 0
+    # i = 0
 
     with tqdm(loader, leave=False) as pbar_train:
         pbar_train.set_description("[train]")
         for sample in pbar_train:
             image, labels = sample["image"], sample["labels"]
-            # labelIDをtrainlabelIDに変換
-            # labels_numpy = labels.numpy()
-            # labels_numpy = numpy.vectorize(label_dict.get)(labels_numpy)
-            # labels = torch.from_numpy(labels_numpy)
-
             image = image.cuda()
             labels = labels.cuda()
             labels = labels.squeeze(dim=1)
             target = model(image)
 
-            imagesave(target, labels, image, args, i)
-            i += 1
+            # imagesave(target, labels, args, i)
+            # i += 1
 
             loss = criterion(target, labels.long())
             train_loss.update(loss, image.size(0))

@@ -41,8 +41,8 @@ def get_args():
         "-i",
         "--input_channels",
         type=int,
-        default=3,
-        help="number of input_channels. default to 3",
+        default=35,
+        help="number of input_channels. default to 35",
     )
     parser.add_argument(
         "-o",
@@ -84,7 +84,7 @@ def get_args():
     #     type=int,
     #     default=16
     # )
-    parser.add_argument("--crop_size", type=int, default=512)
+    parser.add_argument("--crop_size", type=int, default=256)
 
     # parser.add_argument(
     #     '--num_workers',
@@ -211,24 +211,25 @@ def get_args():
             13: 4,  # fence
             14: 19,  # guard rail
             15: 19,  # bridge
-            16: 5,  # tunnel
-            17: 19,  # pole
-            18: 6,  # traffic light
-            19: 7,  # traffic sign
-            20: 8,  # vegetation
-            21: 9,  # terrain
-            22: 10,  # sky
-            23: 11,  # person
-            24: 12,  # rider
-            25: 19,  # car
-            26: 13,  # truck
-            27: 14,  # bus
-            28: 19,  # caravan
-            29: 19,  # trailer
-            30: 15,  # train
-            31: 16,  # motorcycle
-            32: 17,  # bicycle
-            -1: 19,  # ignore
+            16: 19,  # tunnel
+            17: 5,  # pole
+            18: 19,  # polegroup
+            19: 6,  # traffic light
+            20: 7,  # traffic sign
+            21: 8,  # vegetation
+            22: 9,  # terrain
+            23: 10,  # sky
+            24: 11,  # person
+            25: 12,  # rider
+            26: 13,  # car
+            27: 14,  # truck
+            28: 15,  # bus
+            29: 19,  # caravan
+            30: 19,  # trailer
+            31: 16,  # train
+            32: 17,  # motorcycle
+            33: 18,  # bicycle
+            -1: -1,  # ignore
         },
     )
 

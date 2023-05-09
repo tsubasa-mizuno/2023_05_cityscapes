@@ -25,7 +25,7 @@ def val(model, criterion, epoch, val_loader, evaluator, experiment, args, global
         with torch.no_grad():
             target = model(image)
 
-        # imagesave(target, labels, image, args, i)
+        # imagesave(target, labels, args, i)
         i += 1
 
         loss = criterion(target, labels.long())
