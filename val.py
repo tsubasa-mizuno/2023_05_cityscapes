@@ -15,9 +15,9 @@ def val(model, criterion, epoch, val_loader, evaluator, experiment, args, global
 
     for sample in val_loader:
         image, labels = sample["image"], sample["labels"]
-        labels_numpy = labels.numpy()
-        labels_numpy = numpy.vectorize(label_dict.get)(labels_numpy)
-        labels = torch.from_numpy(labels_numpy)
+        # labels_numpy = labels.numpy()
+        # labels_numpy = numpy.vectorize(label_dict.get)(labels_numpy)
+        # labels = torch.from_numpy(labels_numpy)
         image = image.cuda()
         labels = labels.cuda()
         labels = labels.squeeze(dim=1)

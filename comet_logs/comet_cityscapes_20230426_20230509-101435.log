@@ -1,0 +1,17 @@
+[164330-MainProcess:140689477285696] 12994 COMET INFO [_online.py:264]: Experiment is live on comet.com https://www.comet.com/tsubasa-mizuno/segnet-training-test/f1eeeb09b03d4de8903ef2df187c1eb3
+
+[164330-MainProcess:140689477285696] 197779 COMET WARNING [experiment.py:1641]: Passed step value <util.AverageMeter object at 0x7ff4bbb7c820> is not a number, ignoring it
+[164330-MainProcess:140689477285696] 197782 COMET WARNING [experiment.py:1641]: Passed step value <util.AverageMeter object at 0x7ff4bbb7c820> is not a number, ignoring it
+[164330-MainProcess:140689477285696] 197782 COMET WARNING [experiment.py:1641]: Passed step value <util.AverageMeter object at 0x7ff4bbb7c820> is not a number, ignoring it
+[164330-MainProcess:140689477285696] 272793 COMET WARNING [experiment.py:1641]: Passed step value <util.AverageMeter object at 0x7ff4bbb7c820> is not a number, ignoring it
+[164330-MainProcess:140689477285696] 348337 COMET WARNING [experiment.py:1641]: Passed step value <util.AverageMeter object at 0x7ff492f33d00> is not a number, ignoring it
+[164330-MainProcess:140689477285696] 424034 COMET WARNING [experiment.py:1641]: Passed step value <util.AverageMeter object at 0x7ff4bb14b580> is not a number, ignoring it
+[164330-MainProcess:140689477285696] 500185 COMET WARNING [experiment.py:1641]: Passed step value <util.AverageMeter object at 0x7ff4bb252280> is not a number, ignoring it
+[164330-MainProcess:140689477285696] 577869 COMET WARNING [experiment.py:1641]: Passed step value <util.AverageMeter object at 0x7ff4bb14b580> is not a number, ignoring it
+[164330-MainProcess:140689477285696] 610387 COMET WARNING [experiment.py:1641]: Passed step value <util.AverageMeter object at 0x7ff4bb252280> is not a number, ignoring it
+[164330-MainProcess:140689477285696] 610388 COMET WARNING [experiment.py:1641]: Passed step value <util.AverageMeter object at 0x7ff4bb252280> is not a number, ignoring it
+[164330-MainProcess:140689477285696] 610389 COMET WARNING [experiment.py:1641]: Passed step value <util.AverageMeter object at 0x7ff4bb252280> is not a number, ignoring it
+[164330-MainProcess:140689477285696] 686019 COMET WARNING [experiment.py:1641]: Passed step value <util.AverageMeter object at 0x7ff4bb252280> is not a number, ignoring it
+[164330-MainProcess:140689477285696] 761994 COMET WARNING [experiment.py:1641]: Passed step value <util.AverageMeter object at 0x7ff4bb117c40> is not a number, ignoring it
+[164330-MainProcess:140689477285696] 838135 COMET WARNING [experiment.py:1641]: Passed step value <util.AverageMeter object at 0x7ff492f33d30> is not a number, ignoring it
+[164330-MainProcess:140689477285696] 914724 COMET WARNING [experiment.py:1641]: Passed step value <util.AverageMeter object at 0x7ff4bb288190> is not a number, ignoring it
