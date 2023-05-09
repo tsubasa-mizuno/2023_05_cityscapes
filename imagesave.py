@@ -1,6 +1,5 @@
 import os
 from PIL import Image
-import torch
 import torchvision.transforms as transforms
 import numpy
 
@@ -13,7 +12,7 @@ def imagesave(target, args, i, count):
     target_img = target[0].astype(numpy.uint8)  # uint8に変換
     target_img = Image.fromarray(target_img)
     target_img.putpalette(palette)
-    target_img.save(os.path.join(args.save_dir, f"{i}_{count}_TARGET_IMAGE.PNG"))
+    target_img.save(os.path.join(args.save_dir, f"{count}_{i}_TARGET_IMAGE.PNG"))
 
     # labels_img = Image.fromarray(labels[0].cpu().detach().numpy().astype(numpy.uint8))
     # labels_img.putpalette(palette)

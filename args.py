@@ -79,22 +79,16 @@ def get_args():
         type=float,
         default=1,
     )
-    # parser.add_argument(
-    #     '--train_num_batchs',
-    #     type=int,
-    #     default=16
-    # )
+
     parser.add_argument("--crop_size", type=int, default=256)
 
-    # parser.add_argument(
-    #     '--num_workers',
-    #     type=int,
-    #     default=1,
-    #     help='number of dataloader workders. default 12'
-    # )
     parser.add_argument(
-        "--gpu", type=int, default=0, help="GPU No. to be used for model. default 0"
+        "--gpu",
+        type=int,
+        default=0,
+        help="GPU No. to be used for model. default 0",
     )
+
     parser.add_argument(
         "--gpus",
         type=int,
@@ -126,7 +120,7 @@ def get_args():
         help="model directory",
     )
 
-    parser.add_argument("--workers", type=int, default="8", help="num_workers")
+    parser.add_argument("--workers", type=int, default="16", help="num_workers")
 
     parser.add_argument(
         "--palette",
@@ -233,21 +227,16 @@ def get_args():
         },
     )
 
-    # parser.add_argument(
-    #     '--model_dir',
-    #     type=str,
-    #     default="/mnt/HDD4TB-4/kamiya/SegNet-training/model",
-    #     help='model directory'
-    # )
+    # disabling comet for debugging
+    parser.add_argument(
+        "--disable_comet",
+        "--no_comet",
+        dest="disable_comet",
+        action="store_true",
+        help="do not use comet.ml (default: use comet)",
+    )
+    parser.set_defaults(disable_comet=False)
 
-    # ディレクトリ関連
-    # parser.add_argument('ARC_path', type=str, default="./ARCdataset_png/",
-    #                 help='ARC path directory')
-    # parser.add_argument('ids_dir', type=str, default="/mnt/HDD4TB-4/kamiya/SegNet-training/ids",
-    #                 help='ids directory')
-    # parser.add_argument('coco_dir', type=str, default="/mnt/dataset/COCO",
-    #                 help='coco directory')
     args = parser.parse_args()
-    # print(args)
 
     return args

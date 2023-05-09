@@ -25,7 +25,6 @@ def val(
 
         imagesave(target, args, i, count)
         i += 1
-        count += 1
 
         loss = criterion(target, labels.long())
         val_loss.update(loss.item(), image.size(0))
@@ -41,6 +40,7 @@ def val(
             "{}_{}_checkpoint_{}.pth".format(args.model, args.dataset, epoch),
             args.dir_data_name,
         )
+    count += 1
 
     mIoU = evaluator.Mean_Intersection_over_Union()
     accuracy = evaluator.Pixel_Accuracy()
