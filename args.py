@@ -28,7 +28,7 @@ def get_args():
         help="batch size. default to 8",
     )
     parser.add_argument(
-        "-n", "--num_class", type=int, default=50, help="number of class. default to 50"
+        "-n", "--num_class", type=int, default=20, help="number of class. default to 20"
     )
     parser.add_argument(
         "-e",
@@ -48,8 +48,8 @@ def get_args():
         "-o",
         "--output_channels",
         type=int,
-        default=30,
-        help="number of output_channels. default to 30",
+        default=20,
+        help="number of output_channels. default to 20",
     )
 
     # 学習率
@@ -60,8 +60,8 @@ def get_args():
     parser.add_argument(
         "--val_epochs",
         type=int,
-        default=10,
-        help="validation interval in epochs. default to 10",
+        default=5,
+        help="validation interval in epochs. default to 5",
     )
     parser.add_argument(
         "--save_epochs", type=int, default=10, help="model save epochs. default to 10"
@@ -185,6 +185,47 @@ def get_args():
             11,
             32,  # bicycle
         ],
+    )
+
+    parser.add_argument(
+        "--label_dict",
+        type=dict,
+        default={
+            0: 19,  # unlabeled
+            1: 19,  # ego vehicle
+            2: 19,  # rectification border
+            3: 19,  # out of roi
+            4: 19,  # static
+            5: 19,  # dynamic
+            6: 19,  # ground
+            7: 0,  # road
+            8: 1,  # sidewalk
+            9: 19,  # parking
+            10: 19,  # rail track
+            11: 2,  # building
+            12: 3,  # wall
+            13: 4,  # fence
+            14: 19,  # guard rail
+            15: 19,  # bridge
+            16: 5,  # tunnel
+            17: 19,  # pole
+            18: 6,  # traffic light
+            19: 7,  # traffic sign
+            20: 8,  # vegetation
+            21: 9,  # terrain
+            22: 10,  # sky
+            23: 11,  # person
+            24: 12,  # rider
+            25: 19,  # car
+            26: 13,  # truck
+            27: 14,  # bus
+            28: 19,  # caravan
+            29: 19,  # trailer
+            30: 15,  # train
+            31: 16,  # motorcycle
+            32: 17,  # bicycle
+            -1: 19,  # ignore
+        },
     )
 
     # parser.add_argument(

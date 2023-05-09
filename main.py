@@ -31,7 +31,6 @@ def main():
         for epoch in pbar_epoch:
             pbar_epoch.set_description("[Epoch {}]".format(epoch))
 
-            # trainとtrian_Unetで確認
             iters, global_step = train(
                 model,
                 criterion,
@@ -41,6 +40,7 @@ def main():
                 epoch,
                 experiment,
                 evaluator,
+                args,
                 global_step,
             )
 
