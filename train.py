@@ -31,9 +31,9 @@ def train(
         for sample in pbar_train:
             image, labels = sample["image"], sample["labels"]
             # labelIDをtrainlabelIDに変換
-            labels_numpy = labels.numpy()
-            labels_numpy = numpy.vectorize(label_dict.get)(labels_numpy)
-            labels = torch.from_numpy(labels_numpy)
+            # labels_numpy = labels.numpy()
+            # labels_numpy = numpy.vectorize(label_dict.get)(labels_numpy)
+            # labels = torch.from_numpy(labels_numpy)
 
             image = image.cuda()
             labels = labels.cuda()

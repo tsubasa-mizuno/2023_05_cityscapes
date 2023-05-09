@@ -18,6 +18,7 @@ class AlignedDataset(Dataset):
         # データセットクラスの初期化
         self.args = args
         self.purpose = purpose
+        self.crop_size = args.crop_size
 
         # labelsファイルのパスのリスト
         self.labels_list = []
@@ -115,7 +116,9 @@ class AlignedDataset(Dataset):
 
         # リサイズされた画像の縦と横の長さをリスト化する
         # image.size()[1]：縦の長さ，image.size()[2]：横の長さ
-        h, w = self.short_side(image_tensor.size()[1], image_tensor.size()[2], 256)
+        h, w = self.short_side(
+            image_tensor.size()[1], image_tensor.size()[2], self.crop_size
+        )
         transform_list = [
             transforms.Resize([h, w], Image.NEAREST),
             transforms.RandomCrop((self.args.crop_size, self.args.crop_size * 2)),
