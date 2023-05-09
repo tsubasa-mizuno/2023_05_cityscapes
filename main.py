@@ -8,6 +8,7 @@ from model import model_factory
 from util import Evaluator
 from train import train
 from val import val
+from logger import logger_factory
 
 
 def main():
@@ -22,6 +23,7 @@ def main():
 
     criterion = nn.CrossEntropyLoss(reduction="mean")
     optimizer = torch.optim.SGD(model.parameters(), lr=0.1, momentum=0.9)
+    experiment = logger_factory(args)
     experiment = Experiment(project_name="SegNet_training_test")
     evaluator = Evaluator(args.num_class)
     iters = 0
@@ -40,7 +42,6 @@ def main():
                 epoch,
                 experiment,
                 evaluator,
-                args,
                 global_step,
             )
 

@@ -14,7 +14,6 @@ def train(
     epoch,
     experiment,
     evaluator,
-    args,
     global_step,
 ):
     evaluator.reset()
@@ -34,16 +33,14 @@ def train(
             labels = labels.squeeze(dim=1)
             target = model(image)
 
-            # imagesave(target, labels, args, i)
-            # i += 1
-
             loss = criterion(target, labels.long())
             train_loss.update(loss, image.size(0))
             optimizer.zero_grad()
             loss.backward()
             optimizer.step()
 
+    train_loss_avg = train_loss.avg
     experiment.log_metric(
-        "train_epoch_loss", train_loss.avg, epoch=epoch, step=global_step
+        "train_epoch_loss", train_loss_avg, epoch=epoch, step=global_step
     )
-    return iters, train_loss
+    return iters, global_step
