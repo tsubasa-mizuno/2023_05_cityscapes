@@ -24,6 +24,7 @@ def train(
     train_loss = AverageMeter()
 
     label_dict = args.label_dict
+    i = 0
 
     with tqdm(loader, leave=False) as pbar_train:
         pbar_train.set_description("[train]")
@@ -39,7 +40,8 @@ def train(
             labels = labels.squeeze(dim=1)
             target = model(image)
 
-            imagesave(target, labels, image, args, 1)
+            imagesave(target, labels, image, args, i)
+            i += 1
 
             loss = criterion(target, labels.long())
             train_loss.update(loss, image.size(0))

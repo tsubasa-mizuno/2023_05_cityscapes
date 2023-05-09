@@ -54,7 +54,11 @@ def get_args():
 
     # 学習率
     parser.add_argument(
-        "-s", "--scale", type=float, default=0.1, help="number of scale. default to 0.5"
+        "-s",
+        "--scale",
+        type=float,
+        default=0.01,
+        help="number of scale. default to 0.01",
     )
 
     parser.add_argument(
