@@ -6,7 +6,9 @@ import numpy
 from imagesave import imagesave
 
 
-def val(model, criterion, epoch, val_loader, evaluator, experiment, args, global_step):
+def val(
+    model, criterion, epoch, val_loader, evaluator, experiment, args, global_step, count
+):
     model.eval()
 
     val_loss = AverageMeter()
@@ -21,8 +23,9 @@ def val(model, criterion, epoch, val_loader, evaluator, experiment, args, global
         with torch.no_grad():
             target = model(image)
 
-        imagesave(target, labels, args, i)
+        imagesave(target, args, i, count)
         i += 1
+        count += 1
 
         loss = criterion(target, labels.long())
         val_loss.update(loss.item(), image.size(0))

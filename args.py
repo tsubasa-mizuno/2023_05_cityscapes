@@ -34,8 +34,8 @@ def get_args():
         "-e",
         "--num_epochs",
         type=int,
-        default=40,
-        help="number of epochs. default to 40",
+        default=30,
+        help="number of epochs. default to 30",
     )
     parser.add_argument(
         "-i",
@@ -64,8 +64,8 @@ def get_args():
     parser.add_argument(
         "--val_epochs",
         type=int,
-        default=5,
-        help="validation interval in epochs. default to 5",
+        default=10,
+        help="validation interval in epochs. default to 10",
     )
     parser.add_argument(
         "--save_epochs", type=int, default=10, help="model save epochs. default to 10"
