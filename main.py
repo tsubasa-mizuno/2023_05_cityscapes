@@ -27,7 +27,7 @@ def main():
     evaluator = Evaluator(args.num_class)
     iters = 0
     global_step = 1
-    count = 0
+    c = 0
 
     with tqdm(range(args.num_epochs)) as pbar_epoch:
         for epoch in pbar_epoch:
@@ -46,6 +46,7 @@ def main():
             )
 
             if epoch % args.val_epochs == 0:
+                c += 1
                 global_step = val(
                     model,
                     criterion,
@@ -55,7 +56,7 @@ def main():
                     experiment,
                     args,
                     global_step,
-                    count,
+                    c,
                 )
 
 

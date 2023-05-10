@@ -57,15 +57,15 @@ def get_args():
         "-s",
         "--scale",
         type=float,
-        default=0.01,
+        default=0.5,
         help="number of scale. default to 0.01",
     )
 
     parser.add_argument(
         "--val_epochs",
         type=int,
-        default=10,
-        help="validation interval in epochs. default to 10",
+        default=5,
+        help="validation interval in epochs. default to 5",
     )
     parser.add_argument(
         "--save_epochs", type=int, default=10, help="model save epochs. default to 10"
@@ -109,7 +109,7 @@ def get_args():
     )
     parser.add_argument(
         "--save_dir",
-        default="/mnt/HDD4TB-3/mizuno/2023_05_cityscapes/saveimg",
+        default="/mnt/HDD4TB-3/mizuno/2023_05_cityscapes/saveimg/20230510_2",
         type=str,
     )
 
