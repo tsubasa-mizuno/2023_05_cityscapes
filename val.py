@@ -2,12 +2,11 @@ import torch
 from make_sample import make_sample
 from util import save_checkpoint
 from util import AverageMeter
-import numpy
 from imagesave import imagesave
 
 
 def val(
-    model, criterion, epoch, val_loader, evaluator, experiment, args, global_step, count
+    model, criterion, epoch, val_loader, evaluator, experiment, args, global_step, c
 ):
     model.eval()
 
@@ -23,7 +22,7 @@ def val(
         with torch.no_grad():
             target = model(image)
 
-        imagesave(target, args, i, count)
+        imagesave(target, args, i, c)
         i += 1
 
         loss = criterion(target, labels.long())
@@ -40,13 +39,12 @@ def val(
             "{}_{}_checkpoint_{}.pth".format(args.model, args.dataset, epoch),
             args.dir_data_name,
         )
-    count += 1
 
     mIoU = evaluator.Mean_Intersection_over_Union()
     accuracy = evaluator.Pixel_Accuracy()
 
-    val_loss_avg = val_loss.avg
-    experiment.log_metric("val_epoch_loss", val_loss_avg, epoch=epoch, step=global_step)
+    # val_loss_avg = val_loss.avg
+    experiment.log_metric("val_epoch_loss", val_loss.avg, epoch=epoch, step=global_step)
     experiment.log_metric("val_epoch_accuracy", accuracy, epoch=epoch, step=global_step)
     experiment.log_metric("val_epoch_mIoU", mIoU, epoch=epoch, step=global_step)
 
