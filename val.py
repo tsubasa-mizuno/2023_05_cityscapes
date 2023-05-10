@@ -22,7 +22,7 @@ def val(
         with torch.no_grad():
             target = model(image)
 
-        imagesave(target, args, i, c)
+        imagesave(target, labels, args, i, c)
         i += 1
 
         loss = criterion(target, labels.long())
