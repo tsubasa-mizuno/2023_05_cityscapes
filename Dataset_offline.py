@@ -39,7 +39,7 @@ class AlignedDataset(Dataset):
                 os.path.join(args.image_dir, "train/*/*_leftImg8bit.png")
             )
         # purpose == valの時，valのパスを指定
-        if purpose == "val":
+        elif purpose == "val":
             self.labels_list = glob.glob(
                 os.path.join(args.gtFine_dir, "val/*/*_gtFine_labelIds.png")
             )
@@ -50,11 +50,11 @@ class AlignedDataset(Dataset):
         # purpose == testの時，testのパスを指定
         else:
             self.labels_list = glob.glob(
-                os.path.join(args.gtFine_dir, "train/*/*_gtFine_labelIds.png")
+                os.path.join(args.gtFine_dir, "test/*/*_gtFine_labelIds.png")
             )
             # self.instance_list = glob.glob(os.path.join(args.gtFine_dir, 'test/*/*_gtFine_instanceIds.png'))
             self.image_list = glob.glob(
-                os.path.join(args.image_dir, "train/*/*_leftImg8bit.png")
+                os.path.join(args.image_dir, "test/*/*_leftImg8bit.png")
             )
 
         # ソートする
@@ -168,6 +168,7 @@ class AlignedDataset(Dataset):
 
 
 def dataset_facory(args):
+    # trainが
     train_dataset = AlignedDataset(args, purpose="train")
     val_dataset = AlignedDataset(args, purpose="val")
 

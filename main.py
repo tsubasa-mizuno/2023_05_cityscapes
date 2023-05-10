@@ -23,6 +23,7 @@ def main():
 
     criterion = nn.CrossEntropyLoss(reduction="mean")
     optimizer = torch.optim.SGD(model.parameters(), lr=0.1, momentum=0.9)
+    # experiment = Experiment(project_name="SegNet_training_test")
     experiment = logger_factory(args)
     evaluator = Evaluator(args.num_class)
     iters = 0
