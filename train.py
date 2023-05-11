@@ -38,9 +38,11 @@ def train(
             optimizer.zero_grad()
             loss.backward()
             optimizer.step()
+            experiment.log_metric("train_loss", loss, epoch=epoch, step=global_step)
 
-    # train_loss_avg = train_loss.avg
     experiment.log_metric(
         "train_epoch_loss", train_loss.avg, epoch=epoch, step=global_step
     )
+    global_step += 1
+
     return iters, global_step

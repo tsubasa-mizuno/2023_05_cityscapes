@@ -29,33 +29,13 @@ class AlignedDataset(Dataset):
         # imageファイルのパスのリスト
         self.image_list = []
 
-        # purpose == trainの時，trainのパスを指定
-        if purpose == "train":
-            self.labels_list = glob.glob(
-                os.path.join(args.gtFine_dir, "train/*/*_gtFine_labelIds.png")
-            )
-            # self.instance_list = glob.glob(args.gtFine_dir + 'train/*/*_gtFine_instanceIds.png')
-            self.image_list = glob.glob(
-                os.path.join(args.image_dir, "train/*/*_leftImg8bit.png")
-            )
-        # purpose == valの時，valのパスを指定
-        elif purpose == "val":
-            self.labels_list = glob.glob(
-                os.path.join(args.gtFine_dir, "val/*/*_gtFine_labelIds.png")
-            )
-            # self.instance_list = glob.glob(args.gtFine_dir + 'val/*/*_gtFine_instanceIds.png')
-            self.image_list = glob.glob(
-                os.path.join(args.image_dir, "val/*/*_leftImg8bit.png")
-            )
-        # purpose == testの時，testのパスを指定
-        else:
-            self.labels_list = glob.glob(
-                os.path.join(args.gtFine_dir, "test/*/*_gtFine_labelIds.png")
-            )
-            # self.instance_list = glob.glob(os.path.join(args.gtFine_dir, 'test/*/*_gtFine_instanceIds.png'))
-            self.image_list = glob.glob(
-                os.path.join(args.image_dir, "test/*/*_leftImg8bit.png")
-            )
+        self.labels_list = glob.glob(
+            os.path.join(args.gtFine_dir + purpose + "/*/*_gtFine_labelIds.png")
+        )
+        # self.instance_list = glob.glob(args.gtFine_dir + purpose + '/*/*_gtFine_instanceIds.png')
+        self.image_list = glob.glob(
+            os.path.join(args.image_dir + purpose + "/*/*_leftImg8bit.png")
+        )
 
         # ソートする
         self.labels_list.sort()

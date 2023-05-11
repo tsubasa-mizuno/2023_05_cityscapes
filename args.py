@@ -109,7 +109,7 @@ def get_args():
     )
     parser.add_argument(
         "--save_dir",
-        default="/mnt/HDD4TB-3/mizuno/2023_05_cityscapes/saveimg/20230510_3",
+        default="/mnt/HDD4TB-3/mizuno/2023_05_cityscapes/saveimg",
         type=str,
     )
 

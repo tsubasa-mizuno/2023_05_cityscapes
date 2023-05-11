@@ -5,9 +5,7 @@ from util import AverageMeter
 from imagesave import imagesave
 
 
-def val(
-    model, criterion, epoch, val_loader, evaluator, experiment, args, global_step, c
-):
+def val(model, criterion, epoch, val_loader, evaluator, experiment, args, global_step):
     model.eval()
 
     val_loss = AverageMeter()
@@ -22,7 +20,7 @@ def val(
         with torch.no_grad():
             target = model(image)
 
-        imagesave(target, labels, args, i, c)
+        imagesave(target, labels, args, i, epoch)
         i += 1
 
         loss = criterion(target, labels.long())
@@ -31,6 +29,8 @@ def val(
         pred = pred.data.cpu().numpy()
         label1 = labels.cpu().numpy()
         evaluator.add_batch(label1, pred)
+
+        experiment.log_metric("val_loss", loss, epoch=epoch, step=global_step)
 
     if epoch % args.save_epochs == 0:
         make_sample(image, labels, model, experiment, epoch, dataset=args.dataset)
@@ -43,7 +43,6 @@ def val(
     mIoU = evaluator.Mean_Intersection_over_Union()
     accuracy = evaluator.Pixel_Accuracy()
 
-    # val_loss_avg = val_loss.avg
     experiment.log_metric("val_epoch_loss", val_loss.avg, epoch=epoch, step=global_step)
     experiment.log_metric("val_epoch_accuracy", accuracy, epoch=epoch, step=global_step)
     experiment.log_metric("val_epoch_mIoU", mIoU, epoch=epoch, step=global_step)

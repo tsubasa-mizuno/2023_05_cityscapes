@@ -14,7 +14,7 @@ def imagesave(target, labels, args, i, count):
     target_img.putpalette(palette)
     target_img.save(os.path.join(args.save_dir, f"{i}_{count}_TARGET_IMAGE.PNG"))
 
-    if count == 1:
+    if count == 0:
         labels_img = Image.fromarray(
             labels[0].cpu().detach().numpy().astype(numpy.uint8)
         )
