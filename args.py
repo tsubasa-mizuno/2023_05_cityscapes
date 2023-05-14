@@ -16,8 +16,9 @@ def get_args():
         "-m",
         "--model",
         type=str,
+        choices=["Unet", "Mask2Former"],
         default="Unet",
-        help="CNN model. default to Unet",
+        help="CNN model.",
     )
     parser.add_argument("--pretrain", action="store_true", help="use pretrained model")
     parser.add_argument(
@@ -57,8 +58,8 @@ def get_args():
         "-s",
         "--scale",
         type=float,
-        default=0.1,
-        help="number of scale. default to 0.01",
+        default=0.005,
+        help="number of scale. default to 0.005",
     )
 
     parser.add_argument(
@@ -80,7 +81,7 @@ def get_args():
         default=1,
     )
 
-    parser.add_argument("--crop_size", type=int, default=256)
+    parser.add_argument("--crop_size", type=int, default=384)
 
     parser.add_argument(
         "--gpu",
@@ -109,7 +110,7 @@ def get_args():
     )
     parser.add_argument(
         "--save_dir",
-        default="/mnt/HDD4TB-3/mizuno/2023_05_cityscapes/saveimg",
+        default="/mnt/HDD4TB-3/mizuno/2023_05_cityscapes/saveimg/20230514_256_3",
         type=str,
     )
 

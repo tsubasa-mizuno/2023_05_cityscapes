@@ -1,4 +1,4 @@
-import os.path
+import os
 from PIL import Image
 import torchvision.transforms as transforms
 from torch.utils.data import Dataset, DataLoader
@@ -30,11 +30,11 @@ class AlignedDataset(Dataset):
         self.image_list = []
 
         self.labels_list = glob.glob(
-            os.path.join(args.gtFine_dir + purpose + "/*/*_gtFine_labelIds.png")
+            os.path.join(args.gtFine_dir, purpose, "*/*_gtFine_labelIds.png")
         )
         # self.instance_list = glob.glob(args.gtFine_dir + purpose + '/*/*_gtFine_instanceIds.png')
         self.image_list = glob.glob(
-            os.path.join(args.image_dir + purpose + "/*/*_leftImg8bit.png")
+            os.path.join(args.image_dir, purpose, "*/*_leftImg8bit.png")
         )
 
         # ソートする
