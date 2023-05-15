@@ -1,8 +1,5 @@
 from util import AverageMeter
 from tqdm import tqdm
-import torch
-import numpy
-from imagesave import imagesave
 
 
 def train(
@@ -31,8 +28,9 @@ def train(
             image = image.cuda()
             labels = labels.cuda()
             labels = labels.squeeze(dim=1)
+            # if args.model == "Mask2Former":
+            #     image = preprocess(image)
             target = model(image)
-
             loss = criterion(target, labels.long())
             train_loss.update(loss, image.size(0))
             optimizer.zero_grad()
