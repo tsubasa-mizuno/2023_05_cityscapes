@@ -14,11 +14,8 @@ def imagesave(target, labels, args, i, count):
     target_img.putpalette(palette)
     target_img.save(os.path.join(args.save_dir, f"{i}_{count}_TARGET_IMAGE.PNG"))
 
-    if count == 0:
-        labels_img = Image.fromarray(
-            labels[0].cpu().detach().numpy().astype(numpy.uint8)
-        )
-        labels_img.putpalette(palette)
-        labels_img.save(os.path.join(args.save_dir, f"{i}_LABELS_IMAGE.PNG"))
+    labels_img = Image.fromarray(labels[0].cpu().detach().numpy().astype(numpy.uint8))
+    labels_img.putpalette(palette)
+    labels_img.save(os.path.join(args.save_dir, f"{i}_LABELS_IMAGE.PNG"))
 
     # ペア画像がわかるように

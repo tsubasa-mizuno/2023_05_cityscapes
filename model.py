@@ -1,6 +1,8 @@
 import torch.nn as nn
 import torch
-from transformers import Mask2FormerForUniversalSegmentation
+from transformers import Mask2FormerForUniversalSegmentation, AutoImageProcessor
+
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 
 def model_factory(args):
@@ -15,6 +17,7 @@ def model_factory(args):
         model = Mask2FormerForUniversalSegmentation.from_pretrained(
             "facebook/mask2former-swin-small-cityscapes-semantic"
         )
+        # model = model.to(device)
 
     else:
         raise ValueError("invalid args.model")

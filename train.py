@@ -1,5 +1,8 @@
 from util import AverageMeter
 from tqdm import tqdm
+from transformers.models.mask2former.modeling_mask2former import (
+    Mask2FormerForUniversalSegmentationOutput,
+)
 
 
 def train(
@@ -28,9 +31,9 @@ def train(
             image = image.cuda()
             labels = labels.cuda()
             labels = labels.squeeze(dim=1)
-            # if args.model == "Mask2Former":
-            #     image = preprocess(image)
             target = model(image)
+            if isinstance(target, Mask2FormerForUniversalSegmentationOutput):
+                target = target.masks_queries_logits
             loss = criterion(target, labels.long())
             train_loss.update(loss, image.size(0))
             optimizer.zero_grad()
