@@ -1,4 +1,4 @@
-import os.path
+import os
 from PIL import Image
 import torchvision.transforms as transforms
 from torch.utils.data import Dataset, DataLoader
@@ -17,6 +17,10 @@ class AlignedDataset(Dataset):
     def __init__(self, args, purpose) -> None:
         # データセットクラスの初期化
         self.args = args
+        self.purpose = purpose
+        self.crop_size = args.crop_size
+        self.label_dict = args.label_dict
+        self.palette = args.palette
 
         # labelsファイルのパスのリスト
         self.labels_list = []
@@ -25,33 +29,13 @@ class AlignedDataset(Dataset):
         # imageファイルのパスのリスト
         self.image_list = []
 
-        # purpose == trainの時，trainのパスを指定
-        if purpose == "train":
-            self.labels_list = glob.glob(
-                os.path.join(args.gtFine_folder, "train/*/*_gtFine_labelIds.png")
-            )
-            # self.instance_list = glob.glob(args.gtFine_folder + 'train/*/*_gtFine_instanceIds.png')
-            self.image_list = glob.glob(
-                os.path.join(args.image_folder, "train/*/*_leftImg8bit.png")
-            )
-        # purpose == valの時，valのパスを指定
-        if purpose == "val":
-            self.labels_list = glob.glob(
-                os.path.join(args.gtFine_folder, "val/*/*_gtFine_labelIds.png")
-            )
-            # self.instance_list = glob.glob(args.gtFine_folder + 'val/*/*_gtFine_instanceIds.png')
-            self.image_list = glob.glob(
-                os.path.join(args.image_folder, "val/*/*_leftImg8bit.png")
-            )
-        # purpose == testの時，testのパスを指定
-        else:
-            self.labels_list = glob.glob(
-                os.path.join(args.gtFine_folder, "test/*/*_gtFine_labelIds.png")
-            )
-            # self.instance_list = glob.glob(os.path.join(args.gtFine_folder, 'test/*/*_gtFine_instanceIds.png'))
-            self.image_list = glob.glob(
-                os.path.join(args.image_folder, "test/*/*_leftImg8bit.png")
-            )
+        self.labels_list = glob.glob(
+            os.path.join(args.gtFine_dir, purpose, "*/*_gtFine_labelIds.png")
+        )
+        # self.instance_list = glob.glob(args.gtFine_dir + purpose + '/*/*_gtFine_instanceIds.png')
+        self.image_list = glob.glob(
+            os.path.join(args.image_dir, purpose, "*/*_leftImg8bit.png")
+        )
 
         # ソートする
         self.labels_list.sort()
@@ -72,7 +56,6 @@ class AlignedDataset(Dataset):
 
     def make_dataset(self, index, labels_list, image_list) -> dict:
         # ランダムなindexの画像を取得
-        print(index)
         labels_file_path = labels_list[index]
         # instance_file_path = instance_list[index]
         image_file_path = image_list[index]
@@ -99,8 +82,14 @@ class AlignedDataset(Dataset):
         # ----ラベル画像----
         # img->pil
         pil_labels = Image.open(labels_file_path)
+        # print(labels_file_path)
+
         # pil->np
         labels_numpy = numpy.array(pil_labels)
+
+        # labelIDをtrainlabelIDに変換
+        labels_numpy = numpy.vectorize(self.label_dict.get)(labels_numpy)
+
         # np->tensor
         labels_tensor = torch.from_numpy(labels_numpy).unsqueeze(0)
 
@@ -115,10 +104,11 @@ class AlignedDataset(Dataset):
 
         # リサイズされた画像の縦と横の長さをリスト化する
         # image.size()[1]：縦の長さ，image.size()[2]：横の長さ
-        h, w = self.short_side(image_tensor.size()[1], image_tensor.size()[2], 256)
+        h, w = self.short_side(
+            image_tensor.size()[1], image_tensor.size()[2], self.crop_size
+        )
         transform_list = [
             transforms.Resize([h, w], Image.NEAREST),
-            # transforms.RandomCrop((self.args.crop_size, self.args.crop_size * 2))
             transforms.RandomCrop((self.args.crop_size, self.args.crop_size * 2)),
         ]
 
@@ -158,6 +148,7 @@ class AlignedDataset(Dataset):
 
 
 def dataset_facory(args):
+    # trainが
     train_dataset = AlignedDataset(args, purpose="train")
     val_dataset = AlignedDataset(args, purpose="val")
 
@@ -165,14 +156,14 @@ def dataset_facory(args):
         train_dataset,
         batch_size=args.batch_size,
         num_workers=args.workers,  # argsで指定
-        shuffle=True,
+        shuffle=True,  # ランダムあり
         pin_memory=True,
     )
     val_loader = DataLoader(
         val_dataset,
         batch_size=args.batch_size,
         num_workers=args.workers,  # argsで指定
-        shuffle=False,
+        shuffle=False,  # ランダムなし
         pin_memory=True,
     )
 

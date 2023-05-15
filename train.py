@@ -2,12 +2,24 @@ from util import AverageMeter
 from tqdm import tqdm
 
 
-def train(model, criterion, optimizer, loader, iters, epoch, experiment, evaluator):
+def train(
+    model,
+    criterion,
+    optimizer,
+    loader,
+    iters,
+    epoch,
+    experiment,
+    evaluator,
+    global_step,
+):
     evaluator.reset()
 
     model.train()
 
     train_loss = AverageMeter()
+
+    # i = 0
 
     with tqdm(loader, leave=False) as pbar_train:
         pbar_train.set_description("[train]")
@@ -16,12 +28,19 @@ def train(model, criterion, optimizer, loader, iters, epoch, experiment, evaluat
             image = image.cuda()
             labels = labels.cuda()
             labels = labels.squeeze(dim=1)
-            y = model(image)
-            loss = criterion(y, labels.long())
+            # if args.model == "Mask2Former":
+            #     image = preprocess(image)
+            target = model(image)
+            loss = criterion(target, labels.long())
             train_loss.update(loss, image.size(0))
             optimizer.zero_grad()
             loss.backward()
             optimizer.step()
+            experiment.log_metric("train_loss", loss, epoch=epoch, step=global_step)
 
-    experiment.log_metric("epoch_loss", train_loss.avg, step=epoch)
-    return iters, train_loss
+    experiment.log_metric(
+        "train_epoch_loss", train_loss.avg, epoch=epoch, step=global_step
+    )
+    global_step += 1
+
+    return iters, global_step

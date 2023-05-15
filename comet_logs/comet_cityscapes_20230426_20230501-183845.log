@@ -1,0 +1,32 @@
+[699060-MainProcess:139643027867456] 13148 COMET INFO [_online.py:264]: Experiment is live on comet.com https://www.comet.com/tsubasa-mizuno/segnet-training-test/e4a1f69c658f4576a0e53581109591ff
+
+[699060-MainProcess:139643027867456] 48214 COMET INFO [summary.py:155]: ---------------------------------------------------------------------------------------
+[699060-MainProcess:139643027867456] 48215 COMET INFO [summary.py:156]: Comet.ml Experiment Summary
+[699060-MainProcess:139643027867456] 48215 COMET INFO [summary.py:157]: ---------------------------------------------------------------------------------------
+[699060-MainProcess:139643027867456] 48226 COMET INFO [summary.py:161]:   Data:
+[699060-MainProcess:139643027867456] 48226 COMET INFO [summary.py:170]:     display_summary_level : 1
+[699060-MainProcess:139643027867456] 48229 COMET INFO [summary.py:170]:     url                   : https://www.comet.com/tsubasa-mizuno/segnet-training-test/e4a1f69c658f4576a0e53581109591ff
+[699060-MainProcess:139643027867456] 48230 COMET INFO [summary.py:161]:   Metrics [count] (min, max):
+[699060-MainProcess:139643027867456] 48231 COMET INFO [summary.py:170]:     loss                  : 2.9261603355407715
+[699060-MainProcess:139643027867456] 48231 COMET INFO [summary.py:170]:     train_epoch_loss [10] : (0.3540440797805786, 2.9261603355407715)
+[699060-MainProcess:139643027867456] 48231 COMET INFO [summary.py:170]:     val_epoch_accuracy    : 0.0
+[699060-MainProcess:139643027867456] 48233 COMET INFO [summary.py:170]:     val_epoch_loss [2]    : (4.85939884185791, 20.566530227661133)
+[699060-MainProcess:139643027867456] 48233 COMET INFO [summary.py:170]:     val_epoch_mIoU        : 0.0
+[699060-MainProcess:139643027867456] 48235 COMET INFO [summary.py:161]:   Uploads:
+[699060-MainProcess:139643027867456] 48236 COMET INFO [summary.py:170]:     environment details      : 1
+[699060-MainProcess:139643027867456] 48237 COMET INFO [summary.py:170]:     figures                  : 1
+[699060-MainProcess:139643027867456] 48238 COMET INFO [summary.py:170]:     filename                 : 1
+[699060-MainProcess:139643027867456] 48239 COMET INFO [summary.py:170]:     git metadata             : 1
+[699060-MainProcess:139643027867456] 48239 COMET INFO [summary.py:170]:     git-patch (uncompressed) : 1 (4.17 KB)
+[699060-MainProcess:139643027867456] 48240 COMET INFO [summary.py:170]:     installed packages       : 1
+[699060-MainProcess:139643027867456] 48241 COMET INFO [summary.py:170]:     os packages              : 1
+[699060-MainProcess:139643027867456] 48242 COMET INFO [summary.py:170]:     source_code              : 1 (1.33 KB)
+[699060-MainProcess:139643027867456] 48243 COMET INFO [summary.py:172]: 
+[699060-MainProcess:139643027867456] 48446 COMET INFO [api.py:31]: ---------------------------------------------------------------------------------------
+Log your models to better track, deploy, share, and reproduce your work using: 'comet_ml.integration.pytorch.log_model'.
+Learn more at: https://comet.com/docs/v2/pytorch_log_model
+---------------------------------------------------------------------------------------------------
+Hide this message by setting environment variable "COMET_DISABLE_ANNOUNCEMENT=1"
+
+[699060-MainProcess:139643027867456] 48694 COMET INFO [utils.py:78]: Uploading metrics, params, and assets to Comet before program termination (may take several seconds)
+[699060-MainProcess:139643027867456] 48695 COMET INFO [utils.py:78]: The Python SDK has 3600 seconds to finish uploading collected data

@@ -8,10 +8,7 @@ from model import model_factory
 from util import Evaluator
 from train import train
 from val import val
-
-import os
-
-os.environ["CUDA_LAUNCH_BLOCKING"] = "1"
+from logger import logger_factory
 
 
 def main():
@@ -26,16 +23,17 @@ def main():
 
     criterion = nn.CrossEntropyLoss(reduction="mean")
     optimizer = torch.optim.SGD(model.parameters(), lr=0.1, momentum=0.9)
-    experiment = Experiment(project_name="SegNet_training_test")
+    # experiment = Experiment(project_name="SegNet_training_test")
+    experiment = logger_factory(args)
     evaluator = Evaluator(args.num_class)
     iters = 0
+    global_step = 1
 
     with tqdm(range(args.num_epochs)) as pbar_epoch:
         for epoch in pbar_epoch:
             pbar_epoch.set_description("[Epoch {}]".format(epoch))
 
-            # trainとtrian_Unetで確認
-            iters, train_loss = train(
+            iters, global_step = train(
                 model,
                 criterion,
                 optimizer,
@@ -44,10 +42,20 @@ def main():
                 epoch,
                 experiment,
                 evaluator,
+                global_step,
             )
 
-            if epoch % args.val_epochs == 0:
-                val(model, criterion, epoch, val_loader, evaluator, experiment, args)
+            if epoch % args.val_epochs == 4:
+                global_step = val(
+                    model,
+                    criterion,
+                    epoch,
+                    val_loader,
+                    evaluator,
+                    experiment,
+                    args,
+                    global_step,
+                )
 
 
 if __name__ == "__main__":
