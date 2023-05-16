@@ -3,6 +3,7 @@ from tqdm import tqdm
 from transformers.models.mask2former.modeling_mask2former import (
     Mask2FormerForUniversalSegmentationOutput,
 )
+import torch.nn.functional as F
 
 
 def train(
@@ -22,18 +23,20 @@ def train(
 
     train_loss = AverageMeter()
 
-    # i = 0
-
     with tqdm(loader, leave=False) as pbar_train:
         pbar_train.set_description("[train]")
         for sample in pbar_train:
             image, labels = sample["image"], sample["labels"]
-            image = image.cuda()
+            image = image.cuda().float()
+            # if args.model == "Mask2Former":
+            #     image = image_processor(image, return_tensors="pt")
+
             labels = labels.cuda()
             labels = labels.squeeze(dim=1)
             target = model(image)
             if isinstance(target, Mask2FormerForUniversalSegmentationOutput):
                 target = target.masks_queries_logits
+
             loss = criterion(target, labels.long())
             train_loss.update(loss, image.size(0))
             optimizer.zero_grad()

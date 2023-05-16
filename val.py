@@ -3,6 +3,9 @@ from make_sample import make_sample
 from util import save_checkpoint
 from util import AverageMeter
 from imagesave import imagesave
+from transformers.models.mask2former.modeling_mask2former import (
+    Mask2FormerForUniversalSegmentationOutput,
+)
 
 
 def val(model, criterion, epoch, val_loader, evaluator, experiment, args, global_step):
@@ -19,6 +22,8 @@ def val(model, criterion, epoch, val_loader, evaluator, experiment, args, global
 
         with torch.no_grad():
             target = model(image)
+            if isinstance(target, Mask2FormerForUniversalSegmentationOutput):
+                target = target.masks_queries_logits
 
         imagesave(target, labels, args, i, epoch)
         i += 1

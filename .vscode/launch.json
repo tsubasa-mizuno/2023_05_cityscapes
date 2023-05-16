@@ -57,8 +57,6 @@
                 "0",
                 "--gpus",
                 "1",
-                "--save_dir",
-                "/mnt/HDD4TB-3/mizuno/2023_05_cityscapes/saveimg/20230511_6",
                 "--workers",
                 "16"
             ]
@@ -81,7 +79,7 @@
                 "Mask2Former",
                 "--pretrain",
                 "-b",
-                "8",
+                "2",
                 "-n",
                 "3",
                 "-e",
@@ -105,11 +103,9 @@
                 "--crop_size",
                 "256",
                 "--gpu",
-                "0",
+                "1",
                 "--gpus",
                 "1",
-                "--save_dir",
-                "/mnt/HDD4TB-3/mizuno/2023_05_cityscapes/saveimg/20230511_6",
                 "--workers",
                 "16"
             ]

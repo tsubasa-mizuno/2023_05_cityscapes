@@ -81,7 +81,7 @@ def get_args():
         default=1,
     )
 
-    parser.add_argument("--crop_size", type=int, default=384)
+    parser.add_argument("--crop_size", type=int, default=512)
 
     parser.add_argument(
         "--gpu",
@@ -110,7 +110,7 @@ def get_args():
     )
     parser.add_argument(
         "--save_dir",
-        default="/mnt/HDD4TB-3/mizuno/2023_05_cityscapes/saveimg/20230515",
+        default="/mnt/HDD4TB-3/mizuno/2023_05_cityscapes/saveimg/20230516_m2f_2",
         type=str,
     )
 

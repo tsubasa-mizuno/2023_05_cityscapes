@@ -21,6 +21,7 @@ class AlignedDataset(Dataset):
         self.crop_size = args.crop_size
         self.label_dict = args.label_dict
         self.palette = args.palette
+        self.model = args.model
 
         # labelsファイルのパスのリスト
         self.labels_list = []
@@ -107,16 +108,17 @@ class AlignedDataset(Dataset):
         h, w = self.short_side(
             image_tensor.size()[1], image_tensor.size()[2], self.crop_size
         )
+
         transform_list = [
             transforms.Resize([h, w], Image.NEAREST),
-            transforms.RandomCrop((self.args.crop_size, self.args.crop_size * 2)),
+            transforms.RandomCrop((self.crop_size, self.crop_size * 2)),
         ]
 
         # transform.Compose：複数のTransformを連続して行うTransform
         transform = transforms.Compose(transform_list)
 
-        torch.manual_seed(seed)
-        image_tensor = transform(image_tensor.float())
+        # torch.manual_seed(seed)
+        # image_tensor = transform(image_tensor.float())
 
         torch.manual_seed(seed)
         labels_tensor = transform(labels_tensor.float())
