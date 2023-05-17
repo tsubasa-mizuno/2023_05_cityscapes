@@ -3,7 +3,7 @@ import torch
 import torch.nn as nn
 from tqdm import tqdm
 from args import get_args
-from Dataset_offline import dataset_facory
+from Dataset_offline_2 import dataset_facory
 from model import model_factory
 from util import Evaluator
 from train import train
@@ -23,7 +23,6 @@ def main():
 
     criterion = nn.CrossEntropyLoss(reduction="mean")
     optimizer = torch.optim.SGD(model.parameters(), lr=0.1, momentum=0.9)
-    # experiment = Experiment(project_name="SegNet_training_test")
     experiment = logger_factory(args)
     evaluator = Evaluator(args.num_class)
     iters = 0
@@ -42,6 +41,7 @@ def main():
                 epoch,
                 experiment,
                 evaluator,
+                args,
                 global_step,
             )
 

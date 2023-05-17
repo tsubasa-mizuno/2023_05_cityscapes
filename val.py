@@ -16,20 +16,35 @@ def val(model, criterion, epoch, val_loader, evaluator, experiment, args, global
 
     for sample in val_loader:
         image, labels = sample["image"], sample["labels"]
-        image = image.cuda()
+        if args.model == "Mask2Former":
+            image["pixel_values"] = image["pixel_values"].squeeze(dim=2)
+            image["pixel_values"] = image["pixel_values"].cuda().float()
+            image["pixel_mask"] = image["pixel_mask"].squeeze(dim=2)
+            image["pixel_mask"] = image["pixel_mask"].cuda().float()
+
+        else:
+            image = image.squeeze(dim=1)
+            image = image.cuda().float()
+
         labels = labels.cuda()
         labels = labels.squeeze(dim=1)
 
         with torch.no_grad():
-            target = model(image)
+            target = model(**image)
             if isinstance(target, Mask2FormerForUniversalSegmentationOutput):
                 target = target.masks_queries_logits
+                target = torch.nn.functional.interpolate(
+                    target,
+                    size=(384, 384),
+                    mode="bilinear",
+                    align_corners=False,
+                )
 
         imagesave(target, labels, args, i, epoch)
         i += 1
 
         loss = criterion(target, labels.long())
-        val_loss.update(loss.item(), image.size(0))
+        val_loss.update(loss.item(), labels.size(0))
         pred = torch.argmax(target, dim=1)
         pred = pred.data.cpu().numpy()
         label1 = labels.cpu().numpy()

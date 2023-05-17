@@ -7,8 +7,7 @@ import numpy
 import random
 import math
 import glob
-
-# バッチ単位で乱数をふる
+from transformers import AutoImageProcessor
 
 
 class AlignedDataset(Dataset):
@@ -21,6 +20,11 @@ class AlignedDataset(Dataset):
         self.palette = args.palette
         self.model = args.model
 
+        # プリトレーニド処理器の初期化
+        self.processor = AutoImageProcessor.from_pretrained(
+            "facebook/mask2former-swin-small-cityscapes-semantic"
+        )
+
         # labelsファイルのパスのリスト
         self.labels_list = []
         # imageファイルのパスのリスト
@@ -29,7 +33,6 @@ class AlignedDataset(Dataset):
         self.labels_list = glob.glob(
             os.path.join(args.gtFine_dir, purpose, "*/*_gtFine_labelIds.png")
         )
-        # self.instance_list = glob.glob(args.gtFine_dir + purpose + '/*/*_gtFine_instanceIds.png')
         self.image_list = glob.glob(
             os.path.join(args.image_dir, purpose, "*/*_leftImg8bit.png")
         )
@@ -57,17 +60,27 @@ class AlignedDataset(Dataset):
         # instance_file_path = instance_list[index]
         image_file_path = image_list[index]
 
-        seed = random.randint(0, 2**32)
+        # seed = random.randint(0, 2**32)
+        seed = 0
 
         # shape:H*W*3が欲しい
         # ----実画像-----
         # img->pil
         pil_image = Image.open(image_file_path)
-        # pil->np
-        image_numpy = numpy.array(pil_image)
-        # np->tensor
-        image_tensor = torch.from_numpy(image_numpy).permute(2, 0, 1)
-        # shape：[3, 1024, 2048]
+
+        if self.model == "Mask2Former":
+            # 画像とラベルの前処理をプリトレーニド処理器で行う
+            # image_processor = self.processor(images=pil_image, return_tensors="pt")
+            # ここまでの前処理はOK
+            # image_tensor["pixel_values"] = image_tensor["pixel_values"].squeeze(0)
+            # image_tensor["pixel_mask"] = image_tensor["pixel_mask"].squeeze(0)
+            image_tensor = image_file_path
+        else:
+            # pil->np
+            image_numpy = numpy.array(pil_image)
+            # np->tensor
+            image_tensor = torch.from_numpy(image_numpy).permute(2, 0, 1)
+            # shape：[3, 1024, 2048]
 
         # shape:H*W欲しい
         # ----ラベル画像----
@@ -84,10 +97,8 @@ class AlignedDataset(Dataset):
         # np->tensor
         labels_tensor = torch.from_numpy(labels_numpy).unsqueeze(0)
 
-        # リサイズされた画像の縦と横の長さをリスト化する
-        # image.size()[1]：縦の長さ，image.size()[2]：横の長さ
         h, w = self.short_side(
-            image_tensor.size()[1], image_tensor.size()[2], self.crop_size
+            labels_tensor.size()[1], labels_tensor.size()[2], self.crop_size
         )
 
         transform_list = [
@@ -98,14 +109,16 @@ class AlignedDataset(Dataset):
         # transform.Compose：複数のTransformを連続して行うTransform
         transform = transforms.Compose(transform_list)
 
-        torch.manual_seed(seed)
-        image_tensor = transform(image_tensor.float())
+        if self.model == "Unet":
+            torch.manual_seed(seed)
+            image_tensor = transform(image_tensor.float())
 
         torch.manual_seed(seed)
         labels_tensor = transform(labels_tensor.float())
 
         return {
             "labels": labels_tensor,
+            # 'instance': instance_tensor,
             "image": image_tensor,
         }
 
@@ -113,6 +126,7 @@ class AlignedDataset(Dataset):
         data = self.make_dataset(
             index,
             self.labels_list,
+            # self.instance_list,
             self.image_list,
         )
 
