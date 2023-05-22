@@ -6,9 +6,20 @@ from imagesave import imagesave
 from transformers.models.mask2former.modeling_mask2former import (
     Mask2FormerForUniversalSegmentationOutput,
 )
+from PIL import Image
 
 
-def val(model, criterion, epoch, val_loader, evaluator, experiment, args, global_step):
+def val(
+    model,
+    device,
+    criterion,
+    epoch,
+    val_loader,
+    evaluator,
+    experiment,
+    args,
+    global_step,
+):
     model.eval()
 
     val_loss = AverageMeter()
@@ -17,10 +28,15 @@ def val(model, criterion, epoch, val_loader, evaluator, experiment, args, global
     for sample in val_loader:
         image, labels = sample["image"], sample["labels"]
         if args.model == "Mask2Former":
-            image["pixel_values"] = image["pixel_values"].squeeze(dim=2)
-            image["pixel_values"] = image["pixel_values"].cuda().float()
-            image["pixel_mask"] = image["pixel_mask"].squeeze(dim=2)
-            image["pixel_mask"] = image["pixel_mask"].cuda().float()
+            target = [0] * 8
+            image[i] = Image.open(image[i])
+            inputs = processor(images=image[i], return_tensors="pt")
+            inputs["pixel_values"] = inputs["pixel_values"].cuda()
+            inputs["pixel_mask"] = inputs["pixel_mask"].cuda()
+            outputs = model(**inputs)
+            target[i] = processor.post_process_semantic_segmentation(
+                outputs, target_sizes=[image[i].size[::-1]]
+            )[0]
 
         else:
             image = image.squeeze(dim=1)
@@ -30,7 +46,7 @@ def val(model, criterion, epoch, val_loader, evaluator, experiment, args, global
         labels = labels.squeeze(dim=1)
 
         with torch.no_grad():
-            target = model(**image)
+            target = model(image)
             if isinstance(target, Mask2FormerForUniversalSegmentationOutput):
                 target = target.masks_queries_logits
                 target = torch.nn.functional.interpolate(

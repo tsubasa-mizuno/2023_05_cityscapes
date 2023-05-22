@@ -17,14 +17,11 @@ def model_factory(args):
         model = Mask2FormerForUniversalSegmentation.from_pretrained(
             "facebook/mask2former-swin-small-cityscapes-semantic"
         )
-        # image_processor = AutoImageProcessor.from_pretrained(
-        #     "facebook/mask2former-swin-small-Cityscapes-semantic"
-        # )
         config = Mask2FormerConfig.from_pretrained(
             "facebook/mask2former-swin-small-cityscapes-semantic"
         )
-        config.num_queries = 50  # 任意の値に設定
-        model = Mask2FormerForUniversalSegmentation(config)
+        # config.num_queries = 50  # 任意の値に設定
+        # model = Mask2FormerForUniversalSegmentation(config)
 
     else:
         raise ValueError("invalid args.model")

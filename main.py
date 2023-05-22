@@ -34,6 +34,7 @@ def main():
 
             iters, global_step = train(
                 model,
+                device,
                 criterion,
                 optimizer,
                 train_loader,
@@ -45,9 +46,10 @@ def main():
                 global_step,
             )
 
-            if epoch % args.val_epochs == 4:
+            if epoch % args.val_epochs == 0:
                 global_step = val(
                     model,
+                    device,
                     criterion,
                     epoch,
                     val_loader,

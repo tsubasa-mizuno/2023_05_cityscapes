@@ -35,7 +35,7 @@ def get_args():
         "-e",
         "--num_epochs",
         type=int,
-        default=30,
+        default=31,
         help="number of epochs. default to 30",
     )
     parser.add_argument(
@@ -110,7 +110,7 @@ def get_args():
     )
     parser.add_argument(
         "--save_dir",
-        default="/mnt/HDD4TB-3/mizuno/2023_05_cityscapes/saveimg/20230517_1",
+        default="/mnt/HDD4TB-3/mizuno/2023_05_cityscapes/saveimg/20230519_1",
         type=str,
     )
 

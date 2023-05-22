@@ -7,7 +7,6 @@ import numpy
 import random
 import math
 import glob
-from transformers import AutoImageProcessor
 
 
 class AlignedDataset(Dataset):
@@ -19,11 +18,6 @@ class AlignedDataset(Dataset):
         self.label_dict = args.label_dict
         self.palette = args.palette
         self.model = args.model
-
-        # プリトレーニド処理器の初期化
-        self.processor = AutoImageProcessor.from_pretrained(
-            "facebook/mask2former-swin-small-cityscapes-semantic"
-        )
 
         # labelsファイルのパスのリスト
         self.labels_list = []
@@ -95,11 +89,14 @@ class AlignedDataset(Dataset):
         labels_numpy = numpy.vectorize(self.label_dict.get)(labels_numpy)
 
         # np->tensor
-        labels_tensor = torch.from_numpy(labels_numpy).unsqueeze(0)
+        labels_tensor = torch.from_numpy(labels_numpy)
 
         h, w = self.short_side(
-            labels_tensor.size()[1], labels_tensor.size()[2], self.crop_size
+            labels_tensor.size()[0], labels_tensor.size()[1], self.crop_size
         )
+
+        if self.model == "Unet":
+            labels_tensor = labels_tensor.unsqueeze(0)
 
         transform_list = [
             transforms.Resize([h, w], Image.NEAREST),

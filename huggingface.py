@@ -6,6 +6,7 @@ from PIL import Image
 from transformers import AutoImageProcessor, Mask2FormerForUniversalSegmentation
 import numpy
 import os
+import torch.nn as nn
 
 
 palette = (
@@ -68,6 +69,8 @@ palette = (
     32,  # bicycle
 )
 
+criterion = nn.CrossEntropyLoss(reduction="mean")
+
 # load Mask2Former fine-tuned on Cityscapes semantic segmentation
 processor = AutoImageProcessor.from_pretrained(
     "facebook/mask2former-swin-small-cityscapes-semantic"
@@ -76,10 +79,22 @@ model = Mask2FormerForUniversalSegmentation.from_pretrained(
     "facebook/mask2former-swin-small-cityscapes-semantic"
 )
 
+model = model.cuda()
+
 image = Image.open(
     "/mnt/HDD4TB-3/mizuno/cityscapes/leftImg8bit_trainvaltest/leftImg8bit/train/aachen/aachen_000030_000019_leftImg8bit.png"
 )
+pil_labels = Image.open(
+    "/mnt/HDD4TB-3/mizuno/cityscapes/gtFine_trainvaltest/gtFine/train/aachen/aachen_000030_000019_gtFine_labelIds.png"
+)
 inputs = processor(images=image, return_tensors="pt")
+
+inputs["pixel_values"] = inputs["pixel_values"].cuda()
+inputs["pixel_mask"] = inputs["pixel_mask"].cuda()
+
+labels_numpy = numpy.array(pil_labels)
+labels = torch.from_numpy(labels_numpy)
+labels = labels.cuda()
 
 with torch.no_grad():
     outputs = model(**inputs)
@@ -89,55 +104,32 @@ with torch.no_grad():
 class_queries_logits = outputs.class_queries_logits
 masks_queries_logits = outputs.masks_queries_logits
 
-# pil_image = torchvision.transforms.functional.to_pil_image(masks_queries_logits)
-
-# masks_queries_logits_numpy = numpy.argmax(
-#     masks_queries_logits.cpu().detach().numpy(), axis=1
-# )
-# masks_queries_logits_numpy = masks_queries_logits_numpy[0].astype(
-#     numpy.uint8
-# )  # uint8に変換
-
-# masks_img = Image.fromarray(masks_queries_logits_numpy)
-# masks_img.putpalette(palette)
-
-
 # you can pass them to processor for postprocessing
-predicted_semantic_map = processor.post_process_semantic_segmentation(
+target = processor.post_process_semantic_segmentation(
     outputs, target_sizes=[image.size[::-1]]
 )[0]
+
+target = target.float()
+
+loss = criterion(target, labels.float())
 
 # we refer to the demo notebooks for visualization (see "Resources" section in the Mask2Former docs)
 
 # predicted_semantic_mapをnumpy配列に変換
 # 2次元テンソルをNumPy配列に変換
-tensor_array = predicted_semantic_map.numpy()
+tensor_array = predicted_semantic_map.cpu().numpy()
 
 # データ型をuint8に変換
 uint8_array = tensor_array.astype(numpy.uint8)
 
 # PILイメージに変換
 image = Image.fromarray(uint8_array)
+# predict_img
 image.putpalette(palette)
+# predict_img_2
 
 # PIL Imageに変換して保存
 predicted_semantic_map_img = Image.fromarray(predicted_semantic_map)
 predicted_semantic_map_img.save(
     "/mnt/HDD4TB-3/mizuno/2023_05_cityscapes/saveimg/predicted_semantic_map.png"
 )
-
-
-# predicted_semantic_map = predicted_semantic_map.masks_queries_logits
-
-# predicted_semantic_map = numpy.argmax(
-#     predicted_semantic_map.cpu().detach().numpy(), axis=1
-# )
-# predicted_semantic_map = predicted_semantic_map[0].astype(numpy.uint8)  # uint8に変換
-# predicted_semantic_map = Image.fromarray(predicted_semantic_map)
-# predicted_semantic_map.putpalette(palette)
-# predicted_semantic_map.save(
-#     os.path.join(
-#         "/mnt/HDD4TB-3/mizuno/2023_05_cityscapes/saveimg/20230516_m2f_4",
-#         f"{1}_{1}_TARGET_IMAGE.PNG",
-#     )
-# )
