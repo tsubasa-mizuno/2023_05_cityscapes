@@ -89,19 +89,19 @@ class AlignedDataset(Dataset):
         labels_numpy = numpy.vectorize(self.label_dict.get)(labels_numpy)
 
         # np->tensor
-        labels_tensor = torch.from_numpy(labels_numpy)
+        labels_tensor = torch.from_numpy(labels_numpy).unsqueeze(0)
 
         h, w = self.short_side(
             labels_tensor.size()[0], labels_tensor.size()[1], self.crop_size
         )
 
-        if self.model == "Unet":
-            labels_tensor = labels_tensor.unsqueeze(0)
-
         transform_list = [
             transforms.Resize([h, w], Image.NEAREST),
             transforms.RandomCrop((self.crop_size, self.crop_size * 2)),
         ]
+
+        if self.model == "Mask2Former":
+            labels_tensor = labels_tensor.squeeze(0)
 
         # transform.Compose：複数のTransformを連続して行うTransform
         transform = transforms.Compose(transform_list)

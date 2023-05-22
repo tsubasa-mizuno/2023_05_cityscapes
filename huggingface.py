@@ -82,10 +82,10 @@ model = Mask2FormerForUniversalSegmentation.from_pretrained(
 model = model.cuda()
 
 image = Image.open(
-    "/mnt/HDD4TB-3/mizuno/cityscapes/leftImg8bit_trainvaltest/leftImg8bit/train/aachen/aachen_000030_000019_leftImg8bit.png"
+    "/mnt/HDD10TB-1/mizuno/dataset/cityscapes/leftImg8bit_trainvaltest/leftImg8bit/train/aachen/aachen_000030_000019_leftImg8bit.png"
 )
 pil_labels = Image.open(
-    "/mnt/HDD4TB-3/mizuno/cityscapes/gtFine_trainvaltest/gtFine/train/aachen/aachen_000030_000019_gtFine_labelIds.png"
+    "/mnt/HDD10TB-1/mizuno/dataset/cityscapes/gtFine_trainvaltest/gtFine/train/aachen/aachen_000030_000019_gtFine_labelIds.png"
 )
 inputs = processor(images=image, return_tensors="pt")
 

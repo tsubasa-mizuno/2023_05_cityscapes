@@ -100,17 +100,17 @@ def get_args():
     # dataset_path
     parser.add_argument(
         "--gtFine_dir",
-        default="/mnt/HDD4TB-3/mizuno/cityscapes/gtFine_trainvaltest/gtFine",
+        default="/mnt/HDD10TB-1/mizuno/dataset/cityscapes/gtFine_trainvaltest/gtFine",
         type=str,
     )
     parser.add_argument(
         "--image_dir",
-        default="/mnt/HDD4TB-3/mizuno/cityscapes/leftImg8bit_trainvaltest/leftImg8bit",
+        default="/mnt/HDD10TB-1/mizuno/dataset/cityscapes/leftImg8bit_trainvaltest/leftImg8bit",
         type=str,
     )
     parser.add_argument(
         "--save_dir",
-        default="/mnt/HDD4TB-3/mizuno/2023_05_cityscapes/saveimg/20230519_1",
+        default="/mnt/HDD10TB-1/mizuno/2023_05_cityscapes/saveimg/20230519_1",
         type=str,
     )
 
