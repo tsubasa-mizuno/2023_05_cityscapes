@@ -63,11 +63,6 @@ class AlignedDataset(Dataset):
         pil_image = Image.open(image_file_path)
 
         if self.model == "Mask2Former":
-            # 画像とラベルの前処理をプリトレーニド処理器で行う
-            # image_processor = self.processor(images=pil_image, return_tensors="pt")
-            # ここまでの前処理はOK
-            # image_tensor["pixel_values"] = image_tensor["pixel_values"].squeeze(0)
-            # image_tensor["pixel_mask"] = image_tensor["pixel_mask"].squeeze(0)
             image_tensor = image_file_path
         else:
             # pil->np
@@ -99,9 +94,6 @@ class AlignedDataset(Dataset):
             transforms.Resize([h, w], Image.NEAREST),
             transforms.RandomCrop((self.crop_size, self.crop_size * 2)),
         ]
-
-        if self.model == "Mask2Former":
-            labels_tensor = labels_tensor.squeeze(0)
 
         # transform.Compose：複数のTransformを連続して行うTransform
         transform = transforms.Compose(transform_list)

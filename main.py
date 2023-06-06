@@ -16,7 +16,12 @@ def main():
 
     train_loader, val_loader = dataset_facory(args)
 
-    model = model_factory(args)
+    processor = None
+
+    if args.model == "Mask2Former":
+        model, processor = model_factory(args)
+    else:
+        model = model_factory(args)
 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     model.to(device)
@@ -32,8 +37,10 @@ def main():
         for epoch in pbar_epoch:
             pbar_epoch.set_description("[Epoch {}]".format(epoch))
 
+            # if args.model == "Unet":
             iters, global_step = train(
                 model,
+                processor,
                 device,
                 criterion,
                 optimizer,
@@ -49,6 +56,7 @@ def main():
             if epoch % args.val_epochs == 0:
                 global_step = val(
                     model,
+                    processor,
                     device,
                     criterion,
                     epoch,

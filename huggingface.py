@@ -81,9 +81,14 @@ model = Mask2FormerForUniversalSegmentation.from_pretrained(
 
 model = model.cuda()
 
+# image = Image.open(
+#     "/mnt/HDD10TB-1/mizuno/dataset/cityscapes/leftImg8bit_trainvaltest/leftImg8bit/val/frankfurt/frankfurt_000001_016029_leftImg8bit.png"
+# )
+
 image = Image.open(
-    "/mnt/HDD10TB-1/mizuno/dataset/cityscapes/leftImg8bit_trainvaltest/leftImg8bit/train/aachen/aachen_000030_000019_leftImg8bit.png"
+    "/mnt/HDD10TB-1/mizuno/dataset/cityscapes/leftImg8bit_trainvaltest/leftImg8bit/val/munster/munster_000010_000019_leftImg8bit.png"
 )
+
 pil_labels = Image.open(
     "/mnt/HDD10TB-1/mizuno/dataset/cityscapes/gtFine_trainvaltest/gtFine/train/aachen/aachen_000030_000019_gtFine_labelIds.png"
 )
@@ -106,6 +111,9 @@ masks_queries_logits = outputs.masks_queries_logits
 
 # you can pass them to processor for postprocessing
 target = processor.post_process_semantic_segmentation(
+    outputs, target_sizes=[image.size[::-1]]
+)[0]
+predicted_semantic_map = processor.post_process_semantic_segmentation(
     outputs, target_sizes=[image.size[::-1]]
 )[0]
 

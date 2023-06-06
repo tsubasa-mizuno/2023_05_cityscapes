@@ -7,9 +7,11 @@ def imagesave(target, labels, args, i, count):
     os.makedirs(args.save_dir, exist_ok=True)
     palette = args.palette
 
-    # if args.model == "Unet":
-    target = numpy.argmax(target.cpu().detach().numpy(), axis=1)
-    target_img = target[0].astype(numpy.uint8)  # uint8に変換
+    if args.model == "Unet":
+        target_img = numpy.argmax(target.cpu().detach().numpy(), axis=1)
+    else:
+        target_img = numpy.argmax(target.cpu().detach().numpy(), axis=0)
+    target_img = target_img.astype(numpy.uint8)  # uint8に変換
     # else:
     #     target = target.cpu().numpy()
     #     target_img = target.astype(numpy.uint8)  # uint8に変換
