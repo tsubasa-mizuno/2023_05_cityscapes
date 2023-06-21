@@ -1,12 +1,10 @@
+"""args"""
+
 import argparse
 
 
 def get_args():
     parser = argparse.ArgumentParser(description="simple CNN model")
-    # parser.add_argument('-d', '--dataset_name', type=str,
-    #                     choices=['ARC', 'COCO'],
-    #                     default='ARC',
-    #                     help='name of dataset.')
     parser.add_argument(
         "--dataset",
         type=str,
