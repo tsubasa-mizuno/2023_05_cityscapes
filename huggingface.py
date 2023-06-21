@@ -1,10 +1,9 @@
-import requests
 import torch
 import torchvision
 import torchvision.transforms.functional
 from PIL import Image
 from transformers import AutoImageProcessor, Mask2FormerForUniversalSegmentation
-import numpy
+import numpy as np
 import os
 import torch.nn as nn
 

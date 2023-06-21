@@ -1,3 +1,6 @@
+"""Definition of logs to be left in comet
+    from https://github.com/tamaki-lab/202105_tamaki_simple_cnn_training"""
+
 from datetime import datetime
 from comet_ml import Experiment
 

@@ -1,16 +1,9 @@
-from util import AverageMeter
+"""training"""
+
 from tqdm import tqdm
-from transformers.models.mask2former.modeling_mask2former import (
-    Mask2FormerForUniversalSegmentation,
-    Mask2FormerForUniversalSegmentationOutput,
-)
-from transformers import AutoImageProcessor
 import torch
-from imagesave import imagesave
-import numpy
 from PIL import Image
-import torchvision.transforms as transforms
-import torch.nn.functional as F
+from util import AverageMeter
 
 
 def train(
@@ -32,7 +25,6 @@ def train(
     model.train()
 
     train_loss = AverageMeter()
-    j = 0
 
     with tqdm(loader, leave=False) as pbar_train:
         pbar_train.set_description("[train]")
@@ -68,8 +60,8 @@ def train(
                     for i in class_label_of_b:
                         mask = labels[b] == i  # H, W: bool
                         mask_labels_of_b.append(mask.float())  # list of [H, W] float
-                    mask_labels_of_b = torch.stack(mask_labels_of_b)
 
+                    mask_labels_of_b = torch.stack(mask_labels_of_b)
                     mask_labels.append(
                         mask_labels_of_b
                     )  # list of [num_labels, H, W] float

@@ -1,3 +1,5 @@
+"""specifing of models"""
+
 import torch.nn as nn
 import torch
 from transformers import Mask2FormerForUniversalSegmentation, AutoImageProcessor
@@ -25,4 +27,3 @@ def model_factory(args):
 
     else:
         raise ValueError("invalid args.model")
-        return model
