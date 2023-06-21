@@ -37,7 +37,6 @@ def main():
         for epoch in pbar_epoch:
             pbar_epoch.set_description("[Epoch {}]".format(epoch))
 
-            # if args.model == "Unet":
             iters, global_step = train(
                 model,
                 processor,

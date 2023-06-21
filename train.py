@@ -32,7 +32,7 @@ def train(
     model.train()
 
     train_loss = AverageMeter()
-    i = 0
+    j = 0
 
     with tqdm(loader, leave=False) as pbar_train:
         pbar_train.set_description("[train]")
@@ -47,6 +47,8 @@ def train(
             bs = len(image)
             # labels_shape[8, 256, 512]
 
+            optimizer.zero_grad()
+
             if args.model == "Mask2Former":
                 for i in range(bs):
                     image[i] = Image.open(image[i])
@@ -58,7 +60,7 @@ def train(
                 class_labels = []
                 mask_labels = []
                 for b in range(bs):
-                    class_label_of_b = labels[b].unique()
+                    class_label_of_b = labels[b].unique().long()
                     class_labels.append(class_label_of_b)  # list of [num_labels] long?
 
                     # 各カテゴリiのmaskに対して処理を行う
@@ -75,10 +77,16 @@ def train(
                 outputs = model(
                     **inputs, class_labels=class_labels, mask_labels=mask_labels
                 )
-                # target = processor.post_process_semantic_segmentation(
-                #     outputs, target_sizes=[image[0].size[::-1]]
-                # )[0]
 
+                target = []
+                original_size = image[0].size[::-1]
+                quarter_size = (original_size[0] // 4, original_size[1] // 4)
+
+                target = processor.post_process_semantic_segmentation(
+                    outputs, target_sizes=([quarter_size, quarter_size])
+                )
+
+                target = torch.stack(target)
                 loss = outputs.loss
                 # target_shape[256, 512]
 
@@ -88,10 +96,7 @@ def train(
                 loss = criterion(target, labels.long())
                 # target_shape[8, 3, 256, 512]
 
-            # imagesave(target, labels, args, i, epoch)
-            i += 1
             train_loss.update(loss, labels.size(0))
-            optimizer.zero_grad()
             loss.backward()
             optimizer.step()
             experiment.log_metric("train_loss", loss, epoch=epoch, step=global_step)

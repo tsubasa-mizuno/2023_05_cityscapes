@@ -26,87 +26,77 @@ def val(
     val_loss = AverageMeter()
     i = 0
 
-    for sample in val_loader:
-        image, labels = sample["image"], sample["labels"]
-        labels = labels.to(device)
-        labels = labels.squeeze(dim=1)
-        bs = len(image)
-        if args.model == "Mask2Former":
-            # target = [0] * 8
-            for i in range(bs):
-                image[i] = Image.open(image[i])
-            inputs = processor(images=image, return_tensors="pt")
-            inputs["pixel_values"] = inputs["pixel_values"].to(device)
-            inputs["pixel_mask"] = inputs["pixel_mask"].to(device)
-            # mask_labels_2 = torch.stack(
-            #     [(labels == i).long() for i in range(args.num_class - 1)]
-            # )
-            # mask_labels_2 = mask_labels_2.long()
+    # no_gradで囲む
 
-            # グランドトゥルースオブジェクトの数を取得
-            labels = labels.long()
-            num_target_boxes = labels.max() + 1
-
-            class_labels = []
-            mask_labels = []
-
-            # 各オブジェクトに対して処理を行う
-            for i in range(num_target_boxes):
-                # オブジェクトの領域を特定
-                mask = labels == i
-
-                # マスクが空でないことを確認してからクラスラベルを取得
-                if mask.any():
-                    class_label = labels[mask].mode().values.item()
-                else:
-                    # Handle the case when the mask is empty
-                    class_label = None
-
-                # オブジェクトのマスクを保存
-                mask_labels.append(mask)
-
-                # オブジェクトのクラスラベルを保存
-                class_labels.append(class_label)
-
-            # Noneの値をフィルタリングする
-            class_labels = [label for label in class_labels if label is not None]
-
-            # 結果をテンソルに変換
-            class_labels = (
-                torch.tensor(class_labels).unsqueeze(1).expand(-1, bs).to(device)
+    with torch.no_grad():
+        for sample in val_loader:
+            image, labels = (
+                sample["image"],  # B, C, H, W
+                sample["labels"],  # B, 1, H, W
             )
-            mask_labels = torch.stack(mask_labels).float().to(device)
+            labels = labels.to(device)
+            labels = labels.squeeze(dim=1)  # B, H, W
+            bs = len(image)
+            # labels_shape[8, 256, 512]
 
-            outputs = model(
-                **inputs, class_labels=class_labels, mask_labels=mask_labels
-            )
-            loss = outputs.loss
-            # target_shape[256, 512]
+            if args.model == "Mask2Former":
+                for i in range(bs):
+                    image[i] = Image.open(image[i])
 
-        else:
-            image = image.squeeze(dim=1)
-            image = image.cuda().float()
+                # processorで前処理したpixel_valuesが正常かどうか
+                inputs = processor(images=image, return_tensors="pt")
+                inputs["pixel_values"] = inputs["pixel_values"].to(device)
+                inputs["pixel_mask"] = inputs["pixel_mask"].to(device)
 
-        with torch.no_grad():
-            target = model(image)
-            if isinstance(target, Mask2FormerForUniversalSegmentationOutput):
-                target = target.masks_queries_logits
-                target = torch.nn.functional.interpolate(
-                    target,
-                    size=(384, 384),
-                    mode="bilinear",
-                    align_corners=False,
+                class_labels = []
+                mask_labels = []
+                for b in range(bs):
+                    class_label_of_b = labels[b].unique().long()
+                    class_labels.append(class_label_of_b)  # list of [num_labels] long?
+
+                    # 各カテゴリiのmaskに対して処理を行う
+                    mask_labels_of_b = []
+                    for i in class_label_of_b:
+                        mask = labels[b] == i  # H, W: bool
+                        mask_labels_of_b.append(mask.float())  # list of [H, W] float
+                    mask_labels_of_b = torch.stack(mask_labels_of_b)
+
+                    mask_labels.append(
+                        mask_labels_of_b
+                    )  # list of [num_labels, H, W] float
+
+                outputs = model(
+                    **inputs, class_labels=class_labels, mask_labels=mask_labels
+                )
+                # modelを2回通すと挙動はどうなのか？
+                # class_labelsとmask_labelsをはずしたら動くのか？（loss計算なし）
+
+                target = []
+                original_size = image[0].size[::-1]
+                quarter_size = (original_size[0] // 4, original_size[1] // 4)
+
+                target = processor.post_process_semantic_segmentation(
+                    outputs, target_sizes=([quarter_size, quarter_size])
                 )
 
-        imagesave(target, labels, args, i, epoch)
-        i += 1
+                target = torch.stack(target)
+                pred = target
+                loss = outputs.loss
+                # target_shape[256, 512]
 
-        loss = criterion(target, labels.long())
-        val_loss.update(loss.item(), labels.size(0))
-        pred = torch.argmax(target, dim=1)
-        pred = pred.data.cpu().numpy()
-        label1 = labels.cpu().numpy()
-        evaluator.add_batch(label1, pred)
+            else:
+                image = image.to(device).float()
+                target = model(image)
+                pred = torch.argmax(target, dim=1)
+                loss = criterion(target, labels.long())
+
+            # imagesave(target, labels, args, i, epoch)
+            i += 1
+
+            val_loss.update(loss, labels.size(0))
+            pred = pred.data.cpu().numpy()
+            label1 = labels.cpu().numpy()
+            evaluator.add_batch(label1, pred)
 
         experiment.log_metric("val_loss", loss, epoch=epoch, step=global_step)
 
