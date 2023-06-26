@@ -6,3 +6,4 @@ model
 *.ipynb
 saveimg/
 comet_logs/
+*.PNG
