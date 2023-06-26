@@ -56,7 +56,7 @@ def get_args():
         "-s",
         "--scale",
         type=float,
-        default=0.005,
+        default=0.00001,
         help="number of scale. default to 0.005",
     )
 
@@ -108,7 +108,7 @@ def get_args():
     )
     parser.add_argument(
         "--save_dir",
-        default="/mnt/HDD10TB-1/mizuno/2023_05_cityscapes/saveimg/20230613_1",
+        default="/mnt/HDD10TB-1/mizuno/2023_05_cityscapes/saveimg/20230626_1",
         type=str,
     )
 

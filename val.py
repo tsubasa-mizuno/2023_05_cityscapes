@@ -70,6 +70,9 @@ def val(
                 target = processor.post_process_semantic_segmentation(
                     outputs, target_sizes=([quarter_size, quarter_size])
                 )
+                for b in range(bs):
+                    target_img = target[b]
+                    imagesave(target_img, labels, args, i, epoch, bs)
 
                 target = torch.stack(target)
                 pred = target
@@ -80,8 +83,9 @@ def val(
                 target = model(image)
                 pred = torch.argmax(target, dim=1)
                 loss = criterion(target, labels.long())
+                bs = 1
+                imagesave(target, labels, args, i, epoch, bs)
 
-            # imagesave(target, labels, args, i, epoch)
             i += 1
 
             val_loss.update(loss, labels.size(0))

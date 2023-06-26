@@ -7,7 +7,7 @@ from args import get_args
 from dataloader import dataset_facory
 from model import model_factory
 from util import Evaluator
-from train import train
+from train2 import train
 from val import val
 from logger import logger_factory
 
