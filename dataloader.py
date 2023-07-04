@@ -66,6 +66,9 @@ class AlignedDataset(Dataset):
 
         # labelIDをtrainlabelIDに変換
         labels_numpy = np.vectorize(self.label_dict.get)(labels_numpy)
+        if self.model == "Mask2Former":
+            # 19->255
+            labels_numpy[labels_numpy == 19] = 255
 
         labels_tensor = torch.from_numpy(labels_numpy).unsqueeze(0)
 
@@ -83,10 +86,10 @@ class AlignedDataset(Dataset):
 
         if self.model == "Unet":
             torch.manual_seed(seed)
-            image_tensor = transform(image_tensor.float())
+            image_tensor = transform(image_tensor)
 
         torch.manual_seed(seed)
-        labels_tensor = transform(labels_tensor.float())
+        labels_tensor = transform(labels_tensor)
 
         return {
             "labels": labels_tensor,

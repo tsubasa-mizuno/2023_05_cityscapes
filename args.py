@@ -56,7 +56,7 @@ def get_args():
         "-s",
         "--scale",
         type=float,
-        default=0.00001,
+        default=0.005,
         help="number of scale. default to 0.005",
     )
 

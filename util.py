@@ -5,6 +5,12 @@ import os.path as osp
 
 
 class Evaluator(object):
+    """from Kamiya's code (from unknown source)
+
+    Args:
+        object (_type_): _description_
+    """
+
     def __init__(self, num_class):
         self.num_class = num_class
         self.confusion_matrix = np.zeros((self.num_class,) * 2)

@@ -96,7 +96,7 @@ inputs = processor(images=image, return_tensors="pt")
 inputs["pixel_values"] = inputs["pixel_values"].cuda()
 inputs["pixel_mask"] = inputs["pixel_mask"].cuda()
 
-labels_numpy = numpy.array(pil_labels)
+labels_numpy = np.array(pil_labels)
 labels = torch.from_numpy(labels_numpy)
 labels = labels.cuda()
 
