@@ -5,7 +5,6 @@ import torch
 from PIL import Image
 from util import AverageMeter
 
-
 def train(
     model,
     processor,
@@ -60,6 +59,8 @@ def train(
 
             if args.model == "Mask2Former":
                 images = [Image.open(img) for img in image]
+                if len(images) == 0:
+                    print("error")
                 inputs = processor(
                     images=images,
                     segmentation_maps=labels,
@@ -75,15 +76,6 @@ def train(
                     mask_labels=mask_labels,
                     class_labels=class_labels,
                 )
-                # 3ステップ目から出力画像からおかしいみたい？
-
-                # デバッグコード（処理には要らない）
-                target = []
-                original_size = images[0].size[::-1]
-                quarter_size = (original_size[0] // 4, original_size[1] // 4)
-                target = processor.post_process_semantic_segmentation(
-                    outputs, target_sizes=([quarter_size, quarter_size])
-                )
 
                 loss = outputs.loss
 
@@ -93,18 +85,15 @@ def train(
                 target = model(image)  # B, C, H, W
                 loss = criterion(target, labels)
 
-            # Mask2Formerのlossが1枚目からすでにU-netより大きすぎ
-
             train_loss.update(loss, labels.size(0))
             optimizer.zero_grad()
             loss.backward()
             optimizer.step()
-
             experiment.log_metric("train_loss", loss, epoch=epoch, step=global_step)
+            global_step += 1
 
     experiment.log_metric(
         "train_epoch_loss", train_loss.avg, epoch=epoch, step=global_step
     )
-    global_step += 1
 
     return iters, global_step
