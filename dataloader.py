@@ -11,8 +11,8 @@ import torchvision.transforms as transforms
 from PIL import Image
 
 
-class AlignedDataset(Dataset):
-    def __init__(self, args, purpose) -> None:
+class CityScapesDataset(Dataset):
+    def __init__(self, args, purpose, h=2048, w=1024) -> None:
         self.args = args
         self.purpose = purpose
         self.crop_size = args.crop_size
@@ -33,6 +33,17 @@ class AlignedDataset(Dataset):
         self.labels_list.sort()
         # self.instance_list.sort()
         self.image_list.sort()
+        self.transform = self.get_transform(h, w)
+
+    def get_transform(self, h, w):
+        h, w = self.short_side(h, w, self.crop_size)
+
+        return transforms.Compose(
+            [
+                transforms.Resize([h, w], Image.NEAREST),
+                transforms.RandomCrop((self.crop_size, self.crop_size * 2)),
+            ]
+        )
 
     def short_side(self, w, h, size):
         # https://github.com/facebookresearch/pytorchvideo/blob/a77729992bcf1e43bf5fa507c8dc4517b3d7bc4c/pytorchvideo/transforms/functional.py#L118
@@ -44,23 +55,17 @@ class AlignedDataset(Dataset):
             new_w = int(math.floor((float(w) / h) * size))
         return new_w, new_h
 
-    def make_dataset(self, index, labels_list, image_list) -> dict:
-        labels_file_path = labels_list[index]
-        # instance_file_path = instance_list[index]
-        image_file_path = image_list[index]
-
-        seed = random.randint(0, 2**32)
-
-        # image
+    def get_img(self, image_file_path):
         pil_image = Image.open(image_file_path)
 
         if self.model == "Mask2Former":
-            image_tensor = image_file_path
+            return pil_image
         else:
             image_numpy = np.array(pil_image)
             image_tensor = torch.from_numpy(image_numpy).permute(2, 0, 1)
+            return image_tensor
 
-        # labels
+    def get_label(self, labels_file_path):
         pil_labels = Image.open(labels_file_path)
         labels_numpy = np.array(pil_labels)
 
@@ -70,26 +75,21 @@ class AlignedDataset(Dataset):
             # 19->255
             labels_numpy[labels_numpy == 19] = 255
 
-        labels_tensor = torch.from_numpy(labels_numpy).unsqueeze(0)
+        return torch.from_numpy(labels_numpy).unsqueeze(0)
 
-        h, w = self.short_side(
-            labels_tensor.size()[0], labels_tensor.size()[1], self.crop_size
-        )
+    def get_one_pair_unet(self, index, labels_list, image_list) -> dict:
+        labels_file_path = labels_list[index]
+        image_file_path = image_list[index]
 
-        transform_list = [
-            transforms.Resize([h, w], Image.NEAREST),
-            transforms.RandomCrop((self.crop_size, self.crop_size * 2)),
-        ]
-
-        # transform.Compose：複数のTransformを連続して行うTransform
-        transform = transforms.Compose(transform_list)
+        image_tensor = self.get_img(image_file_path)
+        labels_tensor = self.get_label(labels_file_path)
 
         if self.model == "Unet":
+            seed = random.randint(0, 2**32)
             torch.manual_seed(seed)
-            image_tensor = transform(image_tensor)
-
-        torch.manual_seed(seed)
-        labels_tensor = transform(labels_tensor)
+            image_tensor = self.transform(image_tensor)
+            torch.manual_seed(seed)
+            labels_tensor = self.transform(labels_tensor)
 
         return {
             "labels": labels_tensor,
@@ -97,13 +97,21 @@ class AlignedDataset(Dataset):
             "image": image_tensor,
         }
 
+    def get_one_pair_mask2former(self, index, labels_list, image_list) -> dict:
+        labels_file_path = labels_list[index]
+        image_file_path = image_list[index]
+
+        image_pillow = self.get_img(image_file_path)
+        labels_tensor = self.get_label(labels_file_path)
+
     def __getitem__(self, index) -> dict:
-        data = self.make_dataset(
+        data = self.get_one_pair_unet(
             index,
             self.labels_list,
             # self.instance_list,
             self.image_list,
         )
+        # data = self.get_one_pair_mask2former()
 
         return data
 
@@ -112,8 +120,8 @@ class AlignedDataset(Dataset):
 
 
 def dataset_facory(args):
-    train_dataset = AlignedDataset(args, purpose="train")
-    val_dataset = AlignedDataset(args, purpose="val")
+    train_dataset = CityScapesDataset(args, purpose="train")
+    val_dataset = CityScapesDataset(args, purpose="val")
 
     train_loader = DataLoader(
         train_dataset,
